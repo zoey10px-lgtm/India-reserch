@@ -38,15 +38,19 @@ def _cosine(a: list[float], b: list[float]) -> float:
 
 
 class EvidenceReasoner:
-    def __init__(self, nli, encoder=None, settings: EngineSettings | None = None):
+    def __init__(self, nli, encoder=None, settings: EngineSettings | None = None, retriever=None):
         if nli is None:
             raise ValueError("Real NLI is required; refusing to fabricate assessments")
         self.nli = nli
         self.encoder = encoder
+        self.retriever = retriever
         self.settings = settings or EngineSettings()
 
     def _retrieve(self, evidence: list[Evidence], criterion: Criterion, target: TargetContext) -> list[tuple[float, Evidence]]:
         query = target.query(criterion.hypothesis)
+        if self.retriever is not None:
+            matches = self.retriever.retrieve(query, [e.text for e in evidence])
+            return [(score, evidence[i]) for i, score in matches]
         query_tokens = tokens(query)
         dense = None
         if self.encoder is not None:
