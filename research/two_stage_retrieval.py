@@ -31,4 +31,4 @@ class TwoStageRetriever:
         pairs = [(query, passages[i]) for i in indices]
         scores = self.reranker.predict(pairs, batch_size=16)
         ranked = sorted(zip(indices, scores), key=lambda x: -float(x[1]))
-        return [(int(i), float(score)) for i, score in ranked[:self.final_k]]
+        return [(int(i), float(1/(1+np.exp(-np.clip(float(score), -30, 30))))) for i, score in ranked[:self.final_k]]
