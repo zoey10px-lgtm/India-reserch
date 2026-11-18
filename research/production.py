@@ -1,6 +1,7 @@
 """Grounded evidence-first TRL reasoning core; no fabricated confidence."""
 from dataclasses import dataclass
 import math
+import re
 
 @dataclass(frozen=True)
 class Passage:
@@ -89,7 +90,7 @@ class EvidenceEngine:
             # Allow artifact, environment and outcome in different cited passages.
             triple=bool(positive) and all(any(r[k]>=self.triple_threshold for r in positive)
                                           for k in ("artifact","environment","outcome"))
-            if criterion.id in ("C10","C11","C12"): triple=bool(positive)
+            if re.search(r"(?:^|-)C(?:10|11|12)$", criterion.id): triple=bool(positive)
             state=("conflict" if positive and negative else "met" if triple and not negative else
                    "contradicted" if negative else "insufficient evidence")
             cited=sorted(positive,key=lambda r:-r["entailment"]*r["relevance"])[:3] if state=="met" else []
@@ -107,7 +108,8 @@ class EvidenceEngine:
         for cid,cap in (quality_caps or {}).items():
             if cid not in ("C10","C11","C12"):
                 raise ValueError("Only C10-C12 may impose quality caps")
-            if chosen is not None and states.get(cid)!="met" and chosen>cap:
+            matching = next((key for key in states if key == cid or key.endswith("-" + cid)), cid)
+            if chosen is not None and states.get(matching)!="met" and chosen>cap:
                 chosen=int(cap);blocked.append(cid)
         if chosen is not None and levels and chosen<levels[0]: chosen=None
         return {"status":"completed" if chosen is not None else "abstained",
