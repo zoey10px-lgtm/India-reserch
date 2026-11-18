@@ -56,37 +56,26 @@ def read_pdf(path: str, document_id: str, remaining_ms=None, safety_ms: int = 18
         return result
 
 
-def extract_windows(pages: list[Page], max_chars: int = 650, min_chars: int = 25) -> list[Evidence]:
-    """Preserve citations and local context, including short numeric evidence.
+def extract_windows(pages: list[Page], max_chars: int = 650, min_chars: int = 20) -> list[Evidence]:
+    """Exact-span chunks: every output is a verbatim substring of page text.
 
-    This intentionally does NOT discard the first page, tables or numbers.
+    Preserve whitespace and offsets. No paraphrasing or cleaned quotations.
     """
     evidence = []
     for page in pages:
-        cleaned = SPACES.sub(" ", page.text.replace("\r", "\n"))
-        lines = [x.strip() for x in cleaned.splitlines() if x.strip()]
-        section = ""
-        units = []
-        for line in lines:
-            if len(line) < 110 and (line.isupper() or re.match(r"^\d+(?:\.\d+)*\s+[A-Z]", line)):
-                section = line[:120]
-            units.extend(SENTENCE.split(line))
-        buffer = ""
-        for unit in units:
-            unit = unit.strip()
-            if not unit:
-                continue
-            if len(buffer) + len(unit) + 1 > max_chars and buffer:
-                if len(buffer) >= min_chars:
-                    evidence.append(Evidence(page.number, buffer, section=section, source_id=page.document_id))
-                buffer = ""
-            if len(unit) > max_chars:
-                for offset in range(0, len(unit), max_chars):
-                    chunk = unit[offset:offset+max_chars]
-                    if len(chunk) >= min_chars:
-                        evidence.append(Evidence(page.number, chunk, section=section, source_id=page.document_id))
-            else:
-                buffer = f"{buffer} {unit}".strip()
-        if len(buffer) >= min_chars:
-            evidence.append(Evidence(page.number, buffer, section=section, source_id=page.document_id))
+        text = page.text or ""
+        offset = 0
+        while offset < len(text):
+            end = min(len(text), offset + max_chars)
+            if end < len(text):
+                split = max(text.rfind("\\n", offset + max_chars // 2, end),
+                            text.rfind(". ", offset + max_chars // 2, end))
+                if split > offset:
+                    end = split + (1 if text[split] == "\\n" else 2)
+            if end <= offset:
+                end = min(len(text), offset + max_chars)
+            segment = text[offset:end]
+            if len(segment.strip()) >= min_chars:
+                evidence.append(Evidence(page.number, segment, source_id=page.document_id))
+            offset = end
     return evidence
