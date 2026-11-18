@@ -17,6 +17,7 @@ from .research.offline_nli import OfflineNLI
 from .research.pdf_parser import read_pdf, extract_windows
 from .research.pipeline import EvidenceReasoner
 from .research.verification import TargetContext, grounded_evidence
+from .research.two_stage_retrieval import TwoStageRetriever
 
 
 class AssessmentModule:
@@ -50,7 +51,18 @@ class AssessmentModule:
         try:
             device = str(config.get("compute", {}).get("device", "cpu"))
             nli = OfflineNLI(str(model_path), device=device)
-            self.reasoner = EvidenceReasoner(nli=nli)
+            retriever = None
+            encoder_rel = settings.get("encoder_model_path")
+            reranker_rel = settings.get("reranker_model_path")
+            if encoder_rel and reranker_rel:
+                encoder_path = Path(encoder_rel)
+                reranker_path = Path(reranker_rel)
+                if not encoder_path.is_absolute():
+                    encoder_path = store / encoder_path
+                if not reranker_path.is_absolute():
+                    reranker_path = store / reranker_path
+                retriever = TwoStageRetriever(str(encoder_path), str(reranker_path), device=device)
+            self.reasoner = EvidenceReasoner(nli=nli, retriever=retriever)
         except Exception as exc:
             print(f"NLI initialization failed: {exc!r}", file=sys.stderr)
             self.reasoner = None
