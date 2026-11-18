@@ -13,7 +13,8 @@ from typing import Any
 
 from .engine import Criterion, Evidence, Inference, tokens
 from .graph import build_edges
-from .verification import TargetContext, verify_triple, quality_gate, grounded_evidence, confidence_features
+from .verification import TargetContext, verify_triple, confidence_features
+from .criteria_policy import DecisionPolicy
 
 
 @dataclass
@@ -38,13 +39,14 @@ def _cosine(a: list[float], b: list[float]) -> float:
 
 
 class EvidenceReasoner:
-    def __init__(self, nli, encoder=None, settings: EngineSettings | None = None, retriever=None):
+    def __init__(self, nli, encoder=None, settings: EngineSettings | None = None, retriever=None, decision_policy=None):
         if nli is None:
             raise ValueError("Real NLI is required; refusing to fabricate assessments")
         self.nli = nli
         self.encoder = encoder
         self.retriever = retriever
         self.settings = settings or EngineSettings()
+        self.decision_policy = decision_policy or DecisionPolicy()
 
     def _retrieve(self, evidence: list[Evidence], criterion: Criterion, target: TargetContext) -> list[tuple[float, Evidence]]:
         query = target.query(criterion.hypothesis)
@@ -156,9 +158,12 @@ class EvidenceReasoner:
                 break
             chosen = level
         statuses = {r["id"]: r["state"] for r in results}
-        gate = quality_gate(statuses) if all(k in statuses for k in ("C10", "C11", "C12")) else {"pass": False, "missing": ["C10-C12 mapping required"]}
-        if not gate["pass"]:
-            chosen = None
+        gate = {"pass": True, "missing": []}
+        if chosen is not None:
+            chosen, blocked = self.decision_policy.cap(chosen, statuses)
+            gate = {"pass": not blocked, "missing": blocked}
+            if chosen < min(by_level):
+                chosen = None
         return {
             "quality_gate": gate,
             "status": "completed" if chosen is not None else "abstained",
