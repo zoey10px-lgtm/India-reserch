@@ -87,9 +87,11 @@ class EvidenceEngine:
                                "outcome":row[3][0],"prospective":row[4][0]})
             positive=[r for r in scored if r["entailment"]>=self.support and r["prospective"]<self.support]
             negative=[r for r in scored if r["contradiction"]>=self.contradiction]
-            # Allow artifact, environment and outcome in different cited passages.
-            triple=bool(positive) and all(any(r[k]>=self.triple_threshold for r in positive)
-                                          for k in ("artifact","environment","outcome"))
+            # Bind artifact, environment and outcome to the same passage.
+            # Cross-document aggregation can combine unrelated experiments.
+            triple=any(all(r[k]>=self.triple_threshold
+                           for k in ("artifact","environment","outcome"))
+                       for r in positive)
             if re.search(r"(?:^|-)C(?:10|11|12)$", criterion.id): triple=bool(positive)
             state=("conflict" if positive and negative else "met" if triple and not negative else
                    "contradicted" if negative else "insufficient evidence")
