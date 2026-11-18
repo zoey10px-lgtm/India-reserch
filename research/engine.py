@@ -1,7 +1,6 @@
 """Evidence-first TRL reasoning prototype.
 
-Pure Python reference implementation. Inference and retrieval are injectable;
-replace LexicalNLI with a permitted catalogue model before serious evaluation.
+Pure Python reference implementation with an injected inference backend.
 """
 from __future__ import annotations
 
@@ -11,7 +10,6 @@ import math
 import re
 
 _TOKEN = re.compile(r"[a-zA-Z][a-zA-Z0-9-]*")
-_NEG = re.compile(r"\b(not|never|without|no|failed|hasn't|haven't|not yet|planned|proposed|future|will)\b", re.I)
 
 
 def tokens(s: str) -> set[str]:
@@ -50,17 +48,6 @@ class Inference:
 
 class NLI(Protocol):
     def predict(self, premise: str, hypothesis: str) -> Inference: ...
-
-
-class LexicalNLI:
-    """Non-ML placeholder: intentionally conservative; replace for evaluation."""
-    def predict(self, premise: str, hypothesis: str) -> Inference:
-        overlap = len(tokens(premise) & tokens(hypothesis)) / max(1, len(tokens(hypothesis)))
-        if overlap < 0.35:
-            return Inference(0.05, 0.05, 0.90)
-        if _NEG.search(premise):
-            return Inference(0.05, 0.80, 0.15)
-        return Inference(0.55, 0.05, 0.40)
 
 
 def retrieve(evidence: list[Evidence], hypothesis: str, top_k: int = 12) -> list[Evidence]:
@@ -110,8 +97,8 @@ def analyze_criterion(criterion: Criterion, evidence: list[Evidence], target: st
             "score": round(score, 4), "evidence": records[:3]}
 
 
-def assess(evidence: list[Evidence], criteria: list[Criterion], target: str, nli: NLI | None = None) -> dict:
-    model = nli if nli is not None else LexicalNLI()
+def assess(evidence: list[Evidence], criteria: list[Criterion], target: str, nli: NLI) -> dict:
+    model = nli
     results = [analyze_criterion(c, evidence, target, model) for c in criteria]
     levels = sorted({c.trl for c in criteria})
     chosen = None

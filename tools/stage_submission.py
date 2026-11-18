@@ -14,7 +14,7 @@ DEST = ROOT / "participant_module" / "research"
 def main():
     if DEST.exists():
         shutil.rmtree(DEST)
-    shutil.copytree(SRC, DEST, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+    shutil.copytree(SRC, DEST, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "demo.py", "setup_models.py"))
     (ROOT / "participant_module" / "__init__.py").touch(exist_ok=True)
     print(f"Staged {DEST}; now run the official kit validation.")
 

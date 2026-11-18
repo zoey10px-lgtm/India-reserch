@@ -1,30 +1,23 @@
 """Official-facing adapter for the evidence-grounded engine.
 
-Model directories must be supplied by the official catalogue/runtime. Never
-silently substitute lexical inference when a model is missing. This adapter
-is schema-conservative: validate against the official kit before submission.
+The kit provides the local model store, the checklist and the case deadline.
 """
 from __future__ import annotations
 from collections.abc import Mapping
 from pathlib import Path
 import os
-import sys
 
-from .research.production import EvidenceEngine, Criterion, Passage, Target
-from .research.offline_nli import OfflineNLI
-from .research.two_stage_retrieval import TwoStageRetriever
-from .research.pdf_parser import read_pdf, extract_windows
-from .research.criteria_policy import parse_criteria
-from .research.catalog import resolve_catalog_model
-
-
-class _NLIAdapter:
-    def __init__(self, model):
-        self.model = model
-
-    def predict_batch(self, pairs):
-        predictions = self.model.predict_batch(pairs)
-        return [(p.entailment, p.contradiction, p.neutral) for p in predictions]
+# The staging tool vendors research inside the participant package.
+if __package__ and (Path(__file__).parent / "research").is_dir():
+    from .research.catalog import DEFAULT_MODELS, default_model_paths, resolve_catalog_model
+    from .research.criteria_policy import parse_criteria
+    from .research.production import Criterion, Target
+    from .research.runtime import assess_pdfs, load_engine
+else:
+    from research.catalog import DEFAULT_MODELS, default_model_paths, resolve_catalog_model
+    from research.criteria_policy import parse_criteria
+    from research.production import Criterion, Target
+    from research.runtime import assess_pdfs, load_engine
 
 
 class AssessmentModule:
@@ -35,30 +28,31 @@ class AssessmentModule:
         self.settings = {}
 
     def load(self, config: Mapping, asset_root: Path) -> None:
+        self.engine = None
         self.checklist = config["checklist"]
         self.settings = config.get("module", {}).get("settings", {}) or {}
         parsed = parse_criteria(self.checklist, self.settings.get("criterion_levels"))
         self.criteria = [Criterion(c.id, c.hypothesis, c.trl if c.required else None) for c in parsed]
-        store = Path(os.environ.get("APCTT_MODEL_STORE", "/nonexistent"))
-        ids = [self.settings.get("nli_catalog_id"),
-               self.settings.get("encoder_catalog_id", "all-minilm-l6-v2"),
-               self.settings.get("reranker_catalog_id")]
-        if not all(ids):
-            self.engine = None
-            return
-        catalog_path = self.settings.get("catalog_path") or os.environ.get("APCTT_MODEL_CATALOG")
-        if not catalog_path:
-            self.engine = None
-            return
-        paths = [resolve_catalog_model(cid, catalog_path, store) for cid in ids]
+        ids = {role: self.settings.get(f"{role}_catalog_id", model[0])
+               for role, model in DEFAULT_MODELS.items()}
+        catalog = self.settings.get("catalog_path") or os.environ.get("APCTT_MODEL_CATALOG")
+        store = os.environ.get("APCTT_MODEL_STORE")
+        if not store:
+            raise ValueError("Set APCTT_MODEL_STORE to the organizer model directory")
+        if catalog:
+            paths = {role: resolve_catalog_model(cid, catalog, store) for role, cid in ids.items()}
+        else:
+            if any(cid != DEFAULT_MODELS[role][0] for role, cid in ids.items()):
+                raise ValueError("Configure APCTT_MODEL_CATALOG when overriding a model ID")
+            paths = default_model_paths(store)
         device = config.get("compute", {}).get("device", "cpu")
-        try:
-            nli = OfflineNLI(str(paths[0]), device=device)
-            retrieval = TwoStageRetriever(str(paths[1]), str(paths[2]), device=device)
-            self.engine = EvidenceEngine(_NLIAdapter(nli), retrieval)
-        except Exception as exc:
-            print(f"offline model initialization failed: {exc!r}", file=sys.stderr)
-            self.engine = None
+        if device == "cpu":
+            import torch
+
+            torch.set_num_threads(self.settings.get("cpu_threads", min(4, os.cpu_count() or 1)))
+        self.engine = load_engine(
+            paths, device=device, encoder_query_prefix=self.settings.get("encoder_query_prefix", ""),
+        )
 
     def _base(self, case):
         return {
@@ -68,62 +62,54 @@ class AssessmentModule:
             "assessment_target": dict(case["assessment_target"]),
         }
 
-    def _abstain(self, case, reason):
-        ids = [c.id for c in self.criteria]
-        return {**self._base(case),
-            "assessment_status": "abstained",
-            "predicted_trl": None,
-            "criterion_status": {cid: "insufficient evidence" for cid in ids},
-            "evidence_reference": {cid: [] for cid in ids},
-            "missing_evidence": {cid: reason for cid in ids},
-            "abstention_reason": "insufficient evidence",
-            "error_code": None,
-        }
-
     def assess(self, case: Mapping, context) -> dict:
         if self.engine is None:
-            return self._abstain(case, "Catalogue-approved offline models are not configured")
-        try:
-            pages = []
-            for doc in case["documents"]:
-                if context.remaining_ms() < 30000:
-                    return self._abstain(case, "Time budget too low to read all documents")
-                pages.extend(read_pdf(
-                    str(doc["path"]), str(doc["document_id"]),
-                    remaining_ms=context.remaining_ms, enable_ocr=True,
-                ))
-            passages = []
-            for e in extract_windows(pages):
-                passages.append(Passage(e.source_id, e.page, e.text, section=getattr(e, "section", "")))
-            info = case["assessment_target"]
-            target = Target(
-                str(info.get("description") or info.get("target_id") or ""),
-                str(case.get("intended_application") or ""),
-                str(case.get("intended_environment") or ""),
-            )
-            result = self.engine.evaluate(
-                passages, self.criteria, target,
-                remaining_ms=context.remaining_ms,
-                quality_caps=self.settings.get("quality_caps"),
-            )
-            if result["status"] == "abstained":
-                return self._abstain(case, result["abstention_reason"])
-            states = {r["id"]: r for r in result["criteria"]}
-            return {**self._base(case),
-                "assessment_status": "completed",
-                "predicted_trl": result["predicted_trl"],
-                "criterion_status": {c.id: (
-                    "met" if states[c.id]["status"] == "met" else "insufficient evidence"
-                ) for c in self.criteria},
-                "evidence_reference": {c.id: states[c.id]["evidence"] for c in self.criteria},
-                "missing_evidence": {c.id: "Insufficient or conflicting grounded evidence"
-                    for c in self.criteria if states[c.id]["status"] != "met"},
-                "abstention_reason": None, "error_code": None,
-                "trl_rationale": "Evidence-grounded cumulative TRL decision",
+            raise RuntimeError("AssessmentModule.load() must load all three models before assessment")
+        info = case["assessment_target"]
+        target = Target(
+            str(info.get("description") or info.get("target_id") or ""),
+            str(case.get("intended_application") or ""),
+            str(case.get("intended_environment") or ""),
+        )
+        result = assess_pdfs(
+            self.engine,
+            [(doc["document_id"], doc["path"]) for doc in case["documents"]],
+            self.criteria, target, remaining_ms=context.remaining_ms,
+            quality_caps=self.settings.get("quality_caps"),
+        )
+        states = {row["id"]: row for row in result["criteria"]}
+        status = result["status"]
+        if result.get("budget_exhausted"):
+            return {
+                **self._base(case), "assessment_status": "failed", "predicted_trl": None,
+                "criterion_status": {}, "evidence_reference": {}, "missing_evidence": {},
+                "abstention_reason": None, "error_code": "ASSESSMENT_TIME_BUDGET",
             }
-        except Exception as exc:
-            print(f"assessment failed: {exc!r}", file=sys.stderr)
-            return self._abstain(case, "Evaluation failed or exceeded available resources")
+        abstention = None
+        if status == "abstained":
+            abstention = "conflicting evidence" if any(
+                row["status"] == "conflict" for row in states.values()
+            ) else "insufficient evidence"
+        output = {
+            **self._base(case),
+            "assessment_status": status,
+            "predicted_trl": result["predicted_trl"],
+            "abstention_reason": abstention,
+            "error_code": None,
+        }
+        if result["status"] == "completed":
+            output["trl_rationale"] = "Evidence-grounded cumulative TRL decision"
+        contract_states = {"met": "met", "contradicted": "not met"}
+        output["criterion_status"] = {
+            cid: contract_states.get(row["status"], "insufficient evidence")
+            for cid, row in states.items()
+        }
+        output["evidence_reference"] = {cid: row["evidence"] for cid, row in states.items()}
+        output["missing_evidence"] = {
+            cid: result["abstention_reason"] or "Insufficient or conflicting grounded evidence"
+            for cid, state in output["criterion_status"].items() if state == "insufficient evidence"
+        }
+        return output
 
     def reset_case(self):
         pass

@@ -10,9 +10,11 @@ from research.pipeline import EvidenceReasoner, EngineSettings
 class DeterministicNLI:
     def predict_batch(self, pairs):
         out = []
-        for premise, _ in pairs:
+        for premise, hypothesis in pairs:
             if "not tested" in premise.lower():
                 out.append(Inference(0.01, 0.98, 0.01))
+            elif "only a future" in hypothesis or ("observed result" in hypothesis and "measured" not in premise):
+                out.append(Inference(0.01, 0.01, 0.98))
             else:
                 out.append(Inference(0.98, 0.01, 0.01))
         return out
@@ -30,7 +32,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(r["status"], "abstained")
 
     def test_supported(self):
-        e = [Evidence(4, "Prototype A prototype tested in laboratory environment", "Prototype A", source_id="report")]
+        e = [Evidence(4, "Prototype A prototype tested in laboratory environment and measured 42 watts", "Prototype A", source_id="report")]
         r = self.engine.assess(e, self.criterion, "Prototype A")
         self.assertEqual(r["predicted_trl"], 4)
         self.assertEqual(r["criteria"][0]["evidence"][0]["page"], 4)
@@ -40,7 +42,7 @@ class PipelineTests(unittest.TestCase):
         self.assertIsNone(self.engine.assess(e, self.criterion, "Prototype A")["predicted_trl"])
 
     def test_conflicting_claims(self):
-        e = [Evidence(4, "Prototype A prototype tested in laboratory environment", "Prototype A"),
+        e = [Evidence(4, "Prototype A prototype tested in laboratory environment and measured 42 watts", "Prototype A"),
              Evidence(5, "Prototype A prototype not tested in laboratory environment", "Prototype A")]
         r = self.engine.assess(e, self.criterion, "Prototype A")
         self.assertEqual(r["criteria"][0]["state"], "conflict")

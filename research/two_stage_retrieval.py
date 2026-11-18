@@ -1,22 +1,26 @@
 """Offline two-stage semantic retrieval: bi-encoder top 20, cross-encoder top 5.
 
-Both paths must refer to approved locally installed models. No network.
+Both paths must refer to locally installed models.
 """
 from __future__ import annotations
 from pathlib import Path
-import os
 
 class TwoStageRetriever:
     def __init__(self, encoder_path: str, reranker_path: str, device="cpu",
-                 candidate_k=20, final_k=5):
-        os.environ["HF_HUB_OFFLINE"] = "1"
-        os.environ["TRANSFORMERS_OFFLINE"] = "1"
-        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+                 candidate_k=20, final_k=5, query_prefix=""):
+        for role, path in (("Encoder", encoder_path), ("Reranker", reranker_path)):
+            if not Path(path).is_dir():
+                raise FileNotFoundError(f"{role} model directory is missing: {path}")
         from sentence_transformers import SentenceTransformer, CrossEncoder
-        if not Path(encoder_path).is_dir() or not Path(reranker_path).is_dir():
-            raise FileNotFoundError("Both approved local encoder and reranker paths are required")
+        from torch.nn import Identity
+
         self.encoder = SentenceTransformer(encoder_path, device=device, local_files_only=True)
-        self.reranker = CrossEncoder(reranker_path, device=device, local_files_only=True)
+        self.reranker = CrossEncoder(
+            reranker_path, device=device, local_files_only=True, activation_fn=Identity(),
+        )
+        if self.reranker.model.config.num_labels != 1:
+            raise ValueError("Reranker must produce one relevance logit per pair")
+        self.query_prefix = query_prefix
         self.candidate_k = candidate_k
         self.final_k = final_k
         self._passages = None
@@ -33,7 +37,7 @@ class TwoStageRetriever:
                 passages, batch_size=32, normalize_embeddings=True, show_progress_bar=False))
             self._passages = list(passages)
         query_vector = np.asarray(self.encoder.encode(
-            [query], batch_size=1, normalize_embeddings=True, show_progress_bar=False))[0]
+            [self.query_prefix + query], batch_size=1, normalize_embeddings=True, show_progress_bar=False))[0]
         sims = self._vectors @ query_vector
         indices = np.argsort(-sims)[:self.candidate_k].tolist()
         pairs = [(query, passages[i]) for i in indices]

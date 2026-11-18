@@ -56,6 +56,10 @@ def parse_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None
             raise ValueError(f"Unknown criterion-to-TRL mapping: {cid}")
         if level < 0 or level > 9:
             raise ValueError(f"Invalid TRL for {cid}: {level}")
+        if checklist.get("official") is True and ": " in desc:
+            desc = desc.split(": ", 1)[1]
+            desc = re.sub(r"^the report states that ", "", desc, flags=re.I)
+            desc = desc[0].upper() + desc[1:]
         result.append(Criterion(cid, level, desc, required=cid not in QUALITY_IDS))
     if len({c.id for c in result}) != len(result):
         raise ValueError("Duplicate checklist criterion IDs")

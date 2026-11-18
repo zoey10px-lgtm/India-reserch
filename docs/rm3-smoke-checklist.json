@@ -1,0 +1,13 @@
+{
+  "version": "rm3-research-smoke",
+  "criteria": [
+    {
+      "criterion_id": "C03",
+      "description": "Experimental wave tank tests were conducted in the RM3 floating-point absorber wave energy converter study."
+    },
+    {
+      "criterion_id": "C04",
+      "description": "The scale model of the RM3 floating-point absorber wave energy converter was tested in a wave tank and the test results were reported."
+    }
+  ]
+}

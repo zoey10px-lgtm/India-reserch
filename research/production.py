@@ -38,28 +38,40 @@ class EvidenceEngine:
         return {"id":c.id,"trl":c.trl,"status":status,"evidence":list(citations),
                 "diagnostics":{"candidates":count}}
 
-    def _abstain(self, criteria, reason):
+    def abstain(self, criteria, reason, *, budget_exhausted=False):
         return {"status":"abstained","predicted_trl":None,"confidence":None,
-                "abstention_reason":reason,
+                "abstention_reason":reason, "budget_exhausted":budget_exhausted,
                 "criteria":[self._item(c,"insufficient evidence") for c in criteria]}
+
+    def _predict(self, pairs):
+        scores = self.nli.predict_batch(pairs)
+        if len(scores) != len(pairs):
+            raise ValueError("NLI output length mismatch")
+        for row in scores:
+            if (len(row) != 3 or any(not math.isfinite(x) or x < 0 for x in row)
+                    or abs(sum(row) - 1) > 0.02):
+                raise ValueError("Invalid NLI probability vector")
+        return scores
 
     def evaluate(self, passages, criteria, target, *, remaining_ms=lambda:180000, quality_caps=None):
         if not passages or not criteria:
-            return self._abstain(criteria,"No readable passages or criteria")
+            return self.abstain(criteria,"No readable passages or criteria")
         result=[]
+        checks = {}
+        passage_texts = [p.text for p in passages]
         hypotheses=[
             "The described artifact was implemented and tested.",
-            "The passage identifies the environment or conditions of the test.",
-            "The passage reports an observed result or measured outcome.",
+            "Testing took place in a described setting.",
+            "A result from the test was observed or measured.",
             "The test is only planned or proposed, not completed.",
         ]
         for criterion in criteria:
             if remaining_ms()<25000:
-                return self._abstain(criteria,"Time budget exhausted")
-            ranked=self.retriever.retrieve(target.query(criterion),[p.text for p in passages])
+                return self.abstain(criteria, "Time budget exhausted", budget_exhausted=True)
+            ranked=self.retriever.retrieve(target.query(criterion), passage_texts)
             selected=[]; seen=set()
             for idx, relevance in ranked:
-                if not 0<=idx<len(passages) or relevance<.1: continue
+                if not 0 <= idx < len(passages) or not math.isfinite(relevance): continue
                 p=passages[idx]
                 if p.target and p.target.casefold()!=target.technology.casefold(): continue
                 key=(p.document_id,p.text.strip().casefold())
@@ -68,37 +80,47 @@ class EvidenceEngine:
                 selected.append((p,max(0.,min(1.,float(relevance)))))
             if not selected:
                 result.append(self._item(criterion,"insufficient evidence"));continue
-            prompts=[(p.text,h) for p,_ in selected for h in [criterion.hypothesis,*hypotheses]]
-            if remaining_ms()<25000:
-                return self._abstain(criteria,"Time budget exhausted before inference")
-            predictions=self.nli.predict_batch(prompts)
-            if len(predictions)!=len(prompts):
-                raise ValueError("NLI output length mismatch")
-            scored=[]
-            for i,(p,relevance) in enumerate(selected):
-                row=predictions[i*5:(i+1)*5]
-                if any(len(v)!=3 or any(not math.isfinite(float(x)) or x<0 for x in v) or abs(sum(v)-1)>.02 for v in row):
-                    raise ValueError("Invalid NLI probability vector")
-                e,c,n=row[0]
-                scored.append({"document_id":p.document_id,"page":p.page,
-                               "supporting_span":p.text,"relevance":relevance,
-                               "entailment":e,"contradiction":c,
-                               "artifact":row[1][0],"environment":row[2][0],
-                               "outcome":row[3][0],"prospective":row[4][0]})
-            positive=[r for r in scored if r["entailment"]>=self.support and r["prospective"]<self.support]
-            negative=[r for r in scored if r["contradiction"]>=self.contradiction]
-            # Bind artifact, environment and outcome to the same passage.
-            # Cross-document aggregation can combine unrelated experiments.
-            triple=any(all(r[k]>=self.triple_threshold
-                           for k in ("artifact","environment","outcome"))
-                       for r in positive)
-            if re.search(r"(?:^|-)C(?:10|11|12)$", criterion.id): triple=bool(positive)
-            state=("conflict" if positive and negative else "met" if triple and not negative else
-                   "contradicted" if negative else "insufficient evidence")
-            cited=sorted(positive,key=lambda r:-r["entailment"]*r["relevance"])[:3] if state=="met" else []
+            if remaining_ms() < 25000:
+                return self.abstain(criteria, "Time budget exhausted before inference", budget_exhausted=True)
+            predictions = self._predict([(p.text, criterion.hypothesis) for p, _ in selected])
+            needs_completed_test = criterion.trl is not None and criterion.trl >= 3
+            needs_triple = criterion.trl in (4, 5)
+            candidates = [
+                (p, relevance, scores[0])
+                for (p, relevance), scores in zip(selected, predictions)
+                if scores[0] >= self.support
+            ]
+            # Artifact, environment and outcome must come from the same passage.
+            # Cache these criterion-independent checks across the checklist.
+            required = []
+            if needs_completed_test:
+                required = [hypotheses[3]]
+            if criterion.trl is not None and criterion.trl >= 4:
+                required.append(hypotheses[0])
+            if needs_triple:
+                required.extend(hypotheses[1:3])
+            missing = list(dict.fromkeys(
+                (p.text, h) for p, _, _ in candidates for h in required if (p.text, h) not in checks
+            ))
+            if missing:
+                checks.update((pair, score[0]) for pair, score in zip(missing, self._predict(missing)))
+            qualifying = []
+            for p, relevance, entailment in candidates:
+                if needs_completed_test and checks[p.text, hypotheses[3]] >= self.support:
+                    continue
+                if any(checks[p.text, h] < self.triple_threshold for h in required if h != hypotheses[3]):
+                    continue
+                qualifying.append({
+                    "document_id": p.document_id, "page": p.page, "supporting_span": p.text,
+                    "entailment": entailment, "relevance": relevance,
+                })
+            negative = any(scores[1] >= self.contradiction for scores in predictions)
+            state = ("conflict" if qualifying and negative else "contradicted" if negative else
+                     "met" if qualifying else "insufficient evidence")
+            cited = sorted(qualifying, key=lambda r: -r["entailment"] * r["relevance"])[:3] if state == "met" else []
             # The span is copied unchanged from a Passage; no generated citations.
             citations=[{k:r[k] for k in ("document_id","page","supporting_span")} for r in cited]
-            result.append(self._item(criterion,state,citations,len(scored)))
+            result.append(self._item(criterion,state,citations,len(selected)))
         states={r["id"]:r["status"] for r in result}
         levels=sorted({c.trl for c in criteria if c.trl is not None})
         chosen=None
@@ -106,6 +128,8 @@ class EvidenceEngine:
             ids=[c.id for c in criteria if c.trl==level]
             if ids and all(states[cid]=="met" for cid in ids): chosen=level
             else: break
+        if remaining_ms() <= 0:
+            return self.abstain(criteria, "Time budget exhausted after inference", budget_exhausted=True)
         blocked=[]
         for cid,cap in (quality_caps or {}).items():
             if cid not in ("C10","C11","C12"):

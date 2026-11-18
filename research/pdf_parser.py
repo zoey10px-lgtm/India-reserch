@@ -56,7 +56,7 @@ def read_pdf(path: str, document_id: str, remaining_ms=None, safety_ms: int = 18
         return result
 
 
-def extract_windows(pages: list[Page], max_chars: int = 650, min_chars: int = 20) -> list[Evidence]:
+def extract_windows(pages: list[Page], max_chars: int = 1000, min_chars: int = 20) -> list[Evidence]:
     """Exact-span chunks: every output is a verbatim substring of page text.
 
     Preserve whitespace and offsets. No paraphrasing or cleaned quotations.
@@ -68,14 +68,21 @@ def extract_windows(pages: list[Page], max_chars: int = 650, min_chars: int = 20
         while offset < len(text):
             end = min(len(text), offset + max_chars)
             if end < len(text):
-                split = max(text.rfind("\n", offset + max_chars // 2, end),
-                            text.rfind(". ", offset + max_chars // 2, end))
-                if split > offset:
-                    end = split + (1 if text[split] == "\n" else 2)
+                window_start = offset + max_chars // 2
+                sentence_end = text.rfind(". ", window_start, end)
+                line_end = text.rfind("\n", window_start, end)
+                if sentence_end != -1:
+                    end = sentence_end + 2
+                elif line_end != -1:
+                    end = line_end + 1
             if end <= offset:
                 end = min(len(text), offset + max_chars)
             segment = text[offset:end]
             if len(segment.strip()) >= min_chars:
                 evidence.append(Evidence(page.number, segment, source_id=page.document_id))
-            offset = end
+            if end == len(text):
+                break
+            # Carry nearby lines into the next window when a finding straddles a boundary.
+            overlap_start = text.find("\n", max(offset + 1, end - max_chars // 5), end - 1)
+            offset = overlap_start + 1 if overlap_start != -1 else end
     return evidence

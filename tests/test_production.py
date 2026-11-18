@@ -50,9 +50,9 @@ class ProductionTests(unittest.TestCase):
                         answers.append((.01, .01, .98))
                     elif "described artifact" in hypothesis:
                         answers.append((.95, .02, .03) if "artifact" in text else (.02, .02, .96))
-                    elif "identifies the environment" in hypothesis:
+                    elif "described setting" in hypothesis:
                         answers.append((.95, .02, .03) if "environment" in text else (.02, .02, .96))
-                    elif "observed result" in hypothesis:
+                    elif "observed or measured" in hypothesis:
                         answers.append((.95, .02, .03) if "outcome" in text else (.02, .02, .96))
                     else:
                         answers.append((.95, .02, .03))

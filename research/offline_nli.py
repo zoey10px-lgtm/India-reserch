@@ -1,11 +1,5 @@
-"""Offline semantic inference with an actual Hugging Face NLI checkpoint.
-
-Requires a LOCAL, organizer-approved sequence-classification model path.
-Never downloads model weights or silently substitutes keyword inference.
-"""
-from __future__ import annotations
+"""Offline textual inference with a local Hugging Face checkpoint."""
 from pathlib import Path
-import os
 
 from .engine import Inference
 
@@ -15,44 +9,64 @@ class OfflineNLI:
         path = Path(model_path)
         if not path.is_dir():
             raise FileNotFoundError(f"NLI model directory not found: {path}")
-        os.environ["HF_HUB_OFFLINE"] = "1"
-        os.environ["TRANSFORMERS_OFFLINE"] = "1"
-        os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
         import torch
-        from transformers import AutoTokenizer, AutoModelForSequenceClassification
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
+
         self.torch = torch
         self.tokenizer = AutoTokenizer.from_pretrained(str(path), local_files_only=True)
         self.model = AutoModelForSequenceClassification.from_pretrained(
-            str(path), local_files_only=True
+            str(path), local_files_only=True, trust_remote_code=False,
         ).to(device).eval()
         self.device = device
         self.max_length = max_length
-        label_map = {str(v).lower(): int(k) for k, v in self.model.config.id2label.items()}
-        self.indices = {}
-        for name in ("entailment", "contradiction", "neutral"):
-            found = [i for label, i in label_map.items() if name in label]
-            if len(found) != 1:
-                raise ValueError(f"Cannot determine NLI label mapping for {name}: {label_map}")
-            self.indices[name] = found[0]
+        self.labels = {
+            str(label).casefold().replace("-", "_").replace(" ", "_"): int(index)
+            for index, label in self.model.config.id2label.items()
+        }
+        label_names = set(self.labels)
+        self.binary = label_names == {"entailment", "not_entailment"}
+        if not self.binary and label_names != {"entailment", "contradiction", "neutral"}:
+            raise ValueError(f"Unsupported NLI labels: {self.labels}")
 
-    def predict_batch(self, pairs: list[tuple[str, str]], batch_size: int = 12) -> list[Inference]:
-        results: list[Inference] = []
+    def _probabilities(self, pairs, batch_size):
+        results = []
         for start in range(0, len(pairs), batch_size):
             batch = pairs[start:start + batch_size]
             encoded = self.tokenizer(
-                [p for p, _ in batch], [h for _, h in batch],
-                padding=True, truncation=True, max_length=self.max_length,
+                [premise for premise, _ in batch], [hypothesis for _, hypothesis in batch],
+                padding=True, truncation="only_first", max_length=self.max_length,
                 return_tensors="pt",
             ).to(self.device)
             with self.torch.inference_mode():
-                probs = self.model(**encoded).logits.softmax(-1).float().cpu().tolist()
-            for row in probs:
-                results.append(Inference(
-                    entailment=row[self.indices["entailment"]],
-                    contradiction=row[self.indices["contradiction"]],
-                    neutral=row[self.indices["neutral"]],
-                ))
+                scores = self.model(**encoded).logits.float().softmax(dim=-1)
+                results.extend(scores.cpu().tolist())
         return results
+
+    def predict_batch(self, pairs: list[tuple[str, str]], batch_size: int = 12) -> list[Inference]:
+        entailment_index = self.labels["entailment"]
+        if not self.binary:
+            return [
+                Inference(row[entailment_index], row[self.labels["contradiction"]],
+                          row[self.labels["neutral"]])
+                for row in self._probabilities(pairs, batch_size)
+            ]
+
+        # The catalogue model pools neutral and contradiction into not_entailment.
+        # A contradiction needs affirmative support for the explicit denial.
+        negated_pairs = [
+            (premise, f"It is false that {hypothesis.strip().rstrip('.')}.")
+            for premise, hypothesis in pairs
+        ]
+        scores = self._probabilities(pairs + negated_pairs, batch_size)
+        result = []
+        for assertion, denial in zip(scores[:len(pairs)], scores[len(pairs):]):
+            positive = assertion[entailment_index]
+            negative = denial[entailment_index]
+            entailment = min(positive, 1 - negative)
+            contradiction = min(negative, 1 - positive)
+            result.append(Inference(entailment, contradiction, max(0.0, 1 - entailment - contradiction)))
+        return result
 
     def predict(self, premise: str, hypothesis: str) -> Inference:
         return self.predict_batch([(premise, hypothesis)])[0]

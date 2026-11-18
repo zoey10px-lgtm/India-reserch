@@ -5,7 +5,9 @@ class StubNLI:
     def predict(self, premise, hypothesis):
         if "not tested" in premise.lower():
             return Inference(0.02, 0.96, 0.02)
-        return Inference(0.96, 0.02, 0.02)
+        if premise.lower() == hypothesis.lower():
+            return Inference(0.96, 0.02, 0.02)
+        return Inference(0.02, 0.02, 0.96)
 
 class EngineTests(unittest.TestCase):
     def setUp(self):
