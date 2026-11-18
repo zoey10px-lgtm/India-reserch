@@ -144,7 +144,7 @@ class EvidenceReasoner:
         results = [self._criterion(c, evidence, context) for c in criteria]
         # TRL levels are cumulative: a higher level cannot be claimed when
         # a required lower-level criterion is missing or contradictory.
-        by_level = sorted({c.trl for c in criteria})
+        by_level = sorted({c.trl for c in criteria if c.required and c.trl > 0})
         chosen = None
         for level in by_level:
             group = [(c, r) for c, r in zip(criteria, results) if c.trl == level and c.required]
