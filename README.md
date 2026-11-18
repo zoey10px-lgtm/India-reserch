@@ -7,6 +7,24 @@ An offline PDF assessment engine for APCTT's Technology Readiness Level (TRL) ta
 3. Check each criterion with DeBERTa. For contradictions, also test whether the passage supports an explicit denial. For laboratory and relevant-environment validation, require the test article, environment and measured or observed outcome in the same passage.
 4. Return criterion judgments, supporting pages and the highest supported consecutive TRL in the supplied checklist. A missing checkpoint is a model initialization error. Insufficient evidence yields an abstention.
 
+## Verify on a Windows PC
+
+Install 64-bit Python 3.12. From the extracted GitHub ZIP or a local checkout, double-click `verify_pc.cmd`. The first run downloads CPU dependencies, the three checksum-verified model files and the 26-page public RM3 report. It runs inference on your CPU and checks every returned citation against the extracted text on its cited page.
+
+The default check expects `TRL=3` with at least one exact citation under the included **research smoke checklist**. The full JSON is written to `.pc-validation/research-result.json` beside the launcher. After the first run, use `--offline` to repeat the same check with the local files.
+
+From PowerShell, run the following from the repository folder.
+
+```powershell
+.\verify_pc.cmd --offline
+.\verify_pc.cmd --kit "C:/path/to/apctt-participant-kit-0.5.0-cpu"
+.\verify_pc.cmd --pdf "C:/path/to/report.pdf" --target "Technology under assessment" --checklist "C:/path/to/checklist.json"
+```
+
+`--kit` also runs the participant adapter with the kit's 12 official criteria and validates the output using the kit's result validator. It writes `.pc-validation/official-result.json`. An official abstention can pass the output contract. Use `--kit` with your own PDF by supplying `--target`, `--application` and `--environment`. The PC check calls the adapter directly. To exercise the isolated worker and HTTP API, use the organizer server instructions below.
+
+The default inference budget is 180 seconds. For a local timing retry on a slower PC, use `--budget-seconds 300`. On Linux, run the same verifier with `python3.12 tools/verify_pc.py`.
+
 ## Install and run
 
 Use Python 3.12. Install a CPU or CUDA build of PyTorch as appropriate for your machine.
