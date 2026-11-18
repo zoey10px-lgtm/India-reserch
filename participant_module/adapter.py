@@ -16,6 +16,7 @@ from .research.engine import Criterion
 from .research.offline_nli import OfflineNLI
 from .research.pdf_parser import read_pdf, extract_windows
 from .research.pipeline import EvidenceReasoner
+from .research.verification import TargetContext, grounded_evidence
 
 
 class AssessmentModule:
@@ -30,12 +31,12 @@ class AssessmentModule:
         for item in self.checklist["criteria"]:
             desc = str(item.get("description", ""))
             match = re.search(r"\bTRL\s*([1-9])\b", desc, re.I)
-            if not match:
-                # Never invent the level for a criterion with ambiguous metadata.
+            if not match and str(item["criterion_id"]) not in ("C10", "C11", "C12"):
                 continue
             self.criteria.append(Criterion(
-                id=str(item["criterion_id"]), trl=int(match.group(1)),
+                id=str(item["criterion_id"]), trl=(0 if str(item["criterion_id"]) in ("C10", "C11", "C12") else int(match.group(1))),
                 hypothesis=re.sub(r"\(?TRL\s*[1-9]\)?", "", desc, flags=re.I).strip(),
+                required=(str(item["criterion_id"]) not in ("C10", "C11", "C12")),
             ))
         settings = config.get("module", {}).get("settings", {}) or {}
         model_rel = settings.get("nli_model_path") or os.environ.get("APCTT_NLI_MODEL_PATH")
@@ -92,9 +93,10 @@ class AssessmentModule:
             evidence = extract_windows(pages)
             target_info = case.get("assessment_target", {})
             target = " ".join(str(v) for v in target_info.values() if isinstance(v, (str, int)))
-            result = self.reasoner.assess(evidence, self.criteria, target)
+            result = self.reasoner.assess(evidence, self.criteria, TargetContext.from_case(target_info))
             if result["status"] == "abstained":
                 return self._abstain(case, "Required evidence is missing or contradictory.")
+            page_texts = {(p.document_id, p.number): p.text for p in pages}
             response = self._base(case)
             states = {r["id"]: r for r in result["criteria"]}
             response.update({
@@ -104,7 +106,7 @@ class AssessmentModule:
                     c.id: "met" if states[c.id]["state"] == "met" else "insufficient evidence"
                     for c in self.criteria
                 },
-                "evidence_reference": {c.id: states[c.id]["evidence"] for c in self.criteria},
+                "evidence_reference": {c.id: grounded_evidence(states[c.id]["evidence"], page_texts) for c in self.criteria},
                 "missing_evidence": {
                     c.id: "Evidence not established or conflicts with other passages."
                     for c in self.criteria if states[c.id]["state"] != "met"
