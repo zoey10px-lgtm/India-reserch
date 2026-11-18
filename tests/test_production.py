@@ -41,4 +41,31 @@ class ProductionTests(unittest.TestCase):
         p=[Passage("doc",2,"A prototype tested in laboratory and results measured","A")]
         self.assertIsNone(self.engine.evaluate(p,self.criteria,self.target,quality_caps={"C12":3})["predicted_trl"])
 
+    def test_unrelated_partial_evidence_cannot_complete_validation(self):
+        class PartialNLI:
+            def predict_batch(self, pairs):
+                answers = []
+                for text, hypothesis in pairs:
+                    if "only planned" in hypothesis:
+                        answers.append((.01, .01, .98))
+                    elif "described artifact" in hypothesis:
+                        answers.append((.95, .02, .03) if "artifact" in text else (.02, .02, .96))
+                    elif "identifies the environment" in hypothesis:
+                        answers.append((.95, .02, .03) if "environment" in text else (.02, .02, .96))
+                    elif "observed result" in hypothesis:
+                        answers.append((.95, .02, .03) if "outcome" in text else (.02, .02, .96))
+                    else:
+                        answers.append((.95, .02, .03))
+                return answers
+
+        engine = EvidenceEngine(PartialNLI(), Retriever())
+        passages = [
+            Passage("report-a", 1, "A artifact was implemented", "A"),
+            Passage("report-b", 2, "A environment was specified", "A"),
+            Passage("report-c", 3, "A outcome was measured", "A"),
+        ]
+        result = engine.evaluate(passages, [Criterion("C04", "validated prototype", 4)], self.target)
+        self.assertEqual(result["status"], "abstained")
+        self.assertEqual(result["criteria"][0]["status"], "insufficient evidence")
+
 if __name__=="__main__": unittest.main()
