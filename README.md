@@ -38,3 +38,12 @@ Configure `module.settings.nli_model_path`, `encoder_model_path`, `reranker_mode
 
 ### Testing
 `python -m unittest discover -s tests -v` tests deterministic orchestration, not actual model quality. Official kit validation and model inference tests remain required.
+
+## Current engine integration (revision 2026-11-18)
+- `participant_module/adapter.py` now calls `research/production.py` via a self-contained staging copy.
+- `research/production.py` implements batched criterion NLI plus artifact/environment/outcome checks, target filtering, grounded citations, conflicts, sequential TRL decisions, and configurable quality caps.
+- `research/pdf_parser.py` preserves exact source spans and invokes conditional OCR.
+- `tests/test_production.py` covers five deterministic pipeline scenarios. These are NOT real-model benchmarks.
+- Stage dependencies with `python tools/stage_submission.py` before attempting the official submission packager.
+
+**Still required for a verified, submit-ready engine:** approved catalogue IDs and actual model weights; official `DATA_CONTRACT` and model-store paths; full integration test on the organizer's kit; runtime profiling against the three-minute cap; accuracy validation on labeled reports; calibrated confidence; any required package manifest/hash regeneration. Do not submit an unvalidated zip. A missing model causes abstention, not a fake prediction.
