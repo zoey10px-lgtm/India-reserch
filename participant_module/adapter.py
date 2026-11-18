@@ -12,10 +12,10 @@ import re
 import sys
 from typing import Any
 
-from research.engine import Criterion
-from research.offline_nli import OfflineNLI
-from research.pdf_parser import read_pdf, extract_windows
-from research.pipeline import EvidenceReasoner
+from .research.engine import Criterion
+from .research.offline_nli import OfflineNLI
+from .research.pdf_parser import read_pdf, extract_windows
+from .research.pipeline import EvidenceReasoner
 
 
 class AssessmentModule:
