@@ -19,7 +19,7 @@ class Page:
     text: str
 
 
-def read_pdf(path: str, document_id: str, remaining_ms=None, safety_ms: int = 18000) -> list[Page]:
+def read_pdf(path: str, document_id: str, remaining_ms=None, safety_ms: int = 18000, enable_ocr: bool = True) -> list[Page]:
     if remaining_ms is None:
         remaining_ms = lambda: 180000
     try:
@@ -40,6 +40,10 @@ def read_pdf(path: str, document_id: str, remaining_ms=None, safety_ms: int = 18
                 result.append(Page(document_id, idx + 1, text))
         finally:
             pdf.close()
+        if enable_ocr and result and remaining_ms() >= 35000:
+            from .ocr import selective_ocr
+            corrected = selective_ocr(path, [p.text for p in result], remaining_ms=remaining_ms)
+            result = [Page(document_id, p.page, p.text) for p in corrected]
         return result
     except ImportError:
         from pypdf import PdfReader
