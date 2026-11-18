@@ -1,5 +1,8 @@
 import unittest
-from research.production import EvidenceEngine, Passage, Criterion, Target
+from research.production import (
+    LAB_ARTICLE_CLAIMS, LAB_ENVIRONMENT, LAB_OUTCOME, LAB_RESULTS_QUERY,
+    EvidenceEngine, Passage, Criterion, Target,
+)
 
 class Retriever:
     def retrieve(self, query, passages):
@@ -67,5 +70,64 @@ class ProductionTests(unittest.TestCase):
         result = engine.evaluate(passages, [Criterion("C04", "validated prototype", 4)], self.target)
         self.assertEqual(result["status"], "abstained")
         self.assertEqual(result["criteria"][0]["status"], "insufficient evidence")
+
+
+class LaboratoryValidationTests(unittest.TestCase):
+    def test_report_scope_and_same_passage_required(self):
+        class LabNLI:
+            def predict_batch(self, pairs):
+                answers = []
+                for text, claim in pairs:
+                    if claim.startswith("This document describes tests of"):
+                        supported = "target" in text
+                    elif claim == LAB_ENVIRONMENT:
+                        supported = "controlled" in text
+                    elif claim == LAB_OUTCOME:
+                        supported = "observed" in text
+                    elif claim in LAB_ARTICLE_CLAIMS:
+                        supported = "test article" in text
+                    else:
+                        supported = False
+                    answers.append((.98, .01, .01) if supported else (.01, .01, .98))
+                return answers
+
+        engine = EvidenceEngine(LabNLI(), Retriever())
+        criteria = [
+            Criterion("C03", "Earlier proof of concept", 3),
+            Criterion("C04", "Laboratory validation", 4, laboratory_validation=True),
+        ]
+        target = Target("Target")
+        complete = "test article in controlled conditions with observed results"
+        scope = Passage("target-report", 1, "This report tests the target.")
+        unrelated = Passage("unrelated-report", 1, complete)
+        split = [
+            Passage("target-report", 2, "test article in controlled conditions"),
+            Passage("target-report", 3, "observed results"),
+        ]
+        partial = engine.evaluate([scope, unrelated, *split], criteria, target, require_consecutive=False)
+        self.assertEqual(partial["criteria"][1]["status"], "insufficient evidence")
+        self.assertIsNone(partial["predicted_trl"])
+
+        class HeadingRetriever:
+            def retrieve(self, query, passages):
+                # Neither retrieval route initially returns the table text.
+                return [(1, .9)] if query == LAB_RESULTS_QUERY else [(0, .9)]
+
+        engine = EvidenceEngine(LabNLI(), HeadingRetriever())
+        heading = Passage("target-report", 4, "Laboratory Results, Table 1")
+        grounded = [scope, heading, Passage("target-report", 4, complete)]
+        result = engine.evaluate(grounded, criteria, target, require_consecutive=False)
+        self.assertEqual(result["predicted_trl"], 4)
+        self.assertEqual(result["criteria"][0]["status"], "insufficient evidence")
+        self.assertEqual(result["criteria"][1]["evidence"], [
+            {"document_id": "target-report", "page": 4, "supporting_span": complete},
+        ])
+        self.assertIsNone(engine.evaluate(grounded, criteria, target)["predicted_trl"])
+
+        separate_page = [scope, heading, Passage("target-report", 5, complete)]
+        self.assertIsNone(
+            engine.evaluate(separate_page, criteria, target, require_consecutive=False)["predicted_trl"]
+        )
+
 
 if __name__=="__main__": unittest.main()

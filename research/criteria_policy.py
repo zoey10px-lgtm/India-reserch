@@ -8,8 +8,16 @@ from dataclasses import dataclass
 from typing import Mapping
 import re
 from .engine import Criterion
+from .production import Criterion as EvidenceCriterion
 
 QUALITY_IDS = frozenset(("C10", "C11", "C12"))
+APCTT_CHECKLIST_V1 = "APCTT-2026-CHECKLIST-v1"
+
+
+def is_official_checklist(checklist: Mapping) -> bool:
+    # The APCTT 0.5.0 worker strips the official flag from its checklist payload.
+    return checklist.get("version") == APCTT_CHECKLIST_V1
+
 
 @dataclass(frozen=True)
 class DecisionPolicy:
@@ -56,7 +64,7 @@ def parse_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None
             raise ValueError(f"Unknown criterion-to-TRL mapping: {cid}")
         if level < 0 or level > 9:
             raise ValueError(f"Invalid TRL for {cid}: {level}")
-        if checklist.get("official") is True and ": " in desc:
+        if is_official_checklist(checklist) and ": " in desc:
             desc = desc.split(": ", 1)[1]
             desc = re.sub(r"^the report states that ", "", desc, flags=re.I)
             desc = desc[0].upper() + desc[1:]
@@ -64,3 +72,18 @@ def parse_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None
     if len({c.id for c in result}) != len(result):
         raise ValueError("Duplicate checklist criterion IDs")
     return result
+
+
+
+def assessment_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None = None) -> list[EvidenceCriterion]:
+    descriptions = {str(item["criterion_id"]): item["description"] for item in checklist["criteria"]}
+    return [
+        EvidenceCriterion(
+            c.id, c.hypothesis, c.trl if c.required else None,
+            laboratory_validation=(
+                is_official_checklist(checklist) and c.trl == 4
+                and descriptions[c.id].partition(":")[0].strip().casefold() == "laboratory validation (trl 4)"
+            ),
+        )
+        for c in parse_criteria(checklist, explicit_levels)
+    ]

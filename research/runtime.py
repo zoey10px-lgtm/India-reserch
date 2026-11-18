@@ -41,7 +41,8 @@ def load_engine(paths, *, device="cpu", encoder_query_prefix=""):
     return EvidenceEngine(_NLIAdapter(nli), retriever)
 
 
-def assess_pdfs(engine, documents, criteria, target, *, remaining_ms, quality_caps=None):
+def assess_pdfs(engine, documents, criteria, target, *, remaining_ms, quality_caps=None,
+                require_consecutive=True):
     passages = []
     for document_id, path in documents:
         if remaining_ms() < 30000:
@@ -50,4 +51,5 @@ def assess_pdfs(engine, documents, criteria, target, *, remaining_ms, quality_ca
         passages.extend(Passage(e.source_id, e.page, e.text) for e in extract_windows(pages))
     return engine.evaluate(
         passages, criteria, target, remaining_ms=remaining_ms, quality_caps=quality_caps,
+        require_consecutive=require_consecutive,
     )

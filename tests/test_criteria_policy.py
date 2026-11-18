@@ -1,5 +1,5 @@
 import unittest
-from research.criteria_policy import parse_criteria, DecisionPolicy
+from research.criteria_policy import assessment_criteria, parse_criteria, DecisionPolicy
 
 class CriteriaPolicyTests(unittest.TestCase):
     def test_official_ids_not_description_regex(self):
@@ -19,6 +19,14 @@ class CriteriaPolicyTests(unittest.TestCase):
     def test_explicit_quality_cap(self):
         policy = DecisionPolicy({"C10": 5})
         self.assertEqual(policy.cap(8, {"C10": "insufficient evidence"}), (5, ["C10"]))
+
+    def test_laboratory_profile_uses_worker_checklist_version_without_official_flag(self):
+        items = [{"criterion_id": "APCTT-C04", "description": (
+            "Laboratory validation (TRL 4): the report states that the assessed component was tested."
+        )}]
+        official = {"version": "APCTT-2026-CHECKLIST-v1", "criteria": items}
+        self.assertTrue(assessment_criteria(official)[0].laboratory_validation)
+        self.assertFalse(assessment_criteria({"version": "local-checklist", "criteria": items})[0].laboratory_validation)
 
     def test_unknown_id_rejected(self):
         with self.assertRaises(ValueError):

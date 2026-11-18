@@ -6,8 +6,8 @@ import json
 import os
 import sys
 
-from .criteria_policy import parse_criteria
-from .production import Criterion, Target
+from .criteria_policy import assessment_criteria, is_official_checklist
+from .production import Target
 from .runtime import assess_pdfs, load_engine
 from .catalog import DEFAULT_MODELS, default_model_paths
 
@@ -34,8 +34,7 @@ def main():
 
     try:
         checklist = json.loads(args.checklist.read_text(encoding="utf-8"))
-        parsed = parse_criteria(checklist, checklist.get("criterion_levels"))
-        criteria = [Criterion(c.id, c.hypothesis, c.trl if c.required else None) for c in parsed]
+        criteria = assessment_criteria(checklist, checklist.get("criterion_levels"))
         for pdf in args.pdf:
             if not pdf.is_file():
                 raise FileNotFoundError(pdf)
@@ -49,6 +48,7 @@ def main():
             engine, [(f"doc-{index}", pdf) for index, pdf in enumerate(args.pdf, 1)], criteria,
             Target(args.target, args.application, args.environment), remaining_ms=remaining_ms,
             quality_caps=checklist.get("quality_caps"),
+            require_consecutive=not is_official_checklist(checklist),
         )
     except Exception as exc:
         print(f"PDF assessment failed ({type(exc).__name__}): {exc}", file=sys.stderr)

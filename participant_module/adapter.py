@@ -10,13 +10,13 @@ import os
 # The staging tool vendors research inside the participant package.
 if __package__ and (Path(__file__).parent / "research").is_dir():
     from .research.catalog import DEFAULT_MODELS, default_model_paths, resolve_catalog_model
-    from .research.criteria_policy import parse_criteria
-    from .research.production import Criterion, Target
+    from .research.criteria_policy import assessment_criteria, is_official_checklist
+    from .research.production import Target
     from .research.runtime import assess_pdfs, load_engine
 else:
     from research.catalog import DEFAULT_MODELS, default_model_paths, resolve_catalog_model
-    from research.criteria_policy import parse_criteria
-    from research.production import Criterion, Target
+    from research.criteria_policy import assessment_criteria, is_official_checklist
+    from research.production import Target
     from research.runtime import assess_pdfs, load_engine
 
 
@@ -31,8 +31,7 @@ class AssessmentModule:
         self.engine = None
         self.checklist = config["checklist"]
         self.settings = config.get("module", {}).get("settings", {}) or {}
-        parsed = parse_criteria(self.checklist, self.settings.get("criterion_levels"))
-        self.criteria = [Criterion(c.id, c.hypothesis, c.trl if c.required else None) for c in parsed]
+        self.criteria = assessment_criteria(self.checklist, self.settings.get("criterion_levels"))
         ids = {role: self.settings.get(f"{role}_catalog_id", model[0])
                for role, model in DEFAULT_MODELS.items()}
         catalog = self.settings.get("catalog_path") or os.environ.get("APCTT_MODEL_CATALOG")
@@ -76,6 +75,7 @@ class AssessmentModule:
             [(doc["document_id"], doc["path"]) for doc in case["documents"]],
             self.criteria, target, remaining_ms=context.remaining_ms,
             quality_caps=self.settings.get("quality_caps"),
+            require_consecutive=not is_official_checklist(self.checklist),
         )
         states = {row["id"]: row for row in result["criteria"]}
         status = result["status"]
@@ -98,7 +98,10 @@ class AssessmentModule:
             "error_code": None,
         }
         if result["status"] == "completed":
-            output["trl_rationale"] = "Evidence-grounded cumulative TRL decision"
+            if is_official_checklist(self.checklist):
+                output["trl_rationale"] = "Highest directly supported TRL in the supplied evidence."
+            else:
+                output["trl_rationale"] = "Evidence-grounded consecutive TRL decision."
         contract_states = {"met": "met", "contradicted": "not met"}
         output["criterion_status"] = {
             cid: contract_states.get(row["status"], "insufficient evidence")

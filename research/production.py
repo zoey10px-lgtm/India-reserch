@@ -16,6 +16,21 @@ class Criterion:
     id: str
     hypothesis: str
     trl: int | None = None
+    laboratory_validation: bool = False
+
+
+LAB_EVIDENCE_QUERY = (
+    "Measured results of laboratory tests on a model or component. "
+    "Experimental setup, conditions and observed performance."
+)
+LAB_RESULTS_QUERY = "Laboratory tests of a prototype, model or component with measured outcomes."
+LAB_ARTICLE_CLAIMS = (
+    "A scaled physical model was used in the test.",
+    "An early version, breadboard, or component was used as the test article.",
+)
+LAB_ENVIRONMENT = "A test article was tested in a controlled laboratory experiment."
+LAB_OUTCOME = "The results of the experiment include actual measurements or observed performance."
+
 
 @dataclass(frozen=True)
 class Target:
@@ -23,7 +38,10 @@ class Target:
     application: str = ""
     environment: str = ""
     def query(self, criterion):
-        return ". ".join(x for x in (criterion.hypothesis, self.technology, self.application, self.environment) if x)
+        parts = (self.technology, LAB_EVIDENCE_QUERY) if criterion.laboratory_validation else (
+            criterion.hypothesis, self.technology, self.application, self.environment,
+        )
+        return ". ".join(part.rstrip(".") for part in parts if part)
 
 class EvidenceEngine:
     def __init__(self, nli, retriever, *, support=.70, contradiction=.70, triple_threshold=.65):
@@ -53,7 +71,8 @@ class EvidenceEngine:
                 raise ValueError("Invalid NLI probability vector")
         return scores
 
-    def evaluate(self, passages, criteria, target, *, remaining_ms=lambda:180000, quality_caps=None):
+    def evaluate(self, passages, criteria, target, *, remaining_ms=lambda:180000,
+                 quality_caps=None, require_consecutive=True):
         if not passages or not criteria:
             return self.abstain(criteria,"No readable passages or criteria")
         result=[]
@@ -68,11 +87,37 @@ class EvidenceEngine:
         for criterion in criteria:
             if remaining_ms()<25000:
                 return self.abstain(criteria, "Time budget exhausted", budget_exhausted=True)
-            ranked=self.retriever.retrieve(target.query(criterion), passage_texts)
+            ranked = self.retriever.retrieve(target.query(criterion), passage_texts)
+            if criterion.laboratory_validation:
+                scoped = [
+                    passages[index] for index, _ in ranked
+                    if 0 <= index < len(passages)
+                ]
+                scope_claim = f"This document describes tests of {target.technology}."
+                scope_scores = self._predict([(passage.text, scope_claim) for passage in scoped])
+                scoped_docs = {
+                    passage.document_id for passage, score in zip(scoped, scope_scores)
+                    if score[0] >= self.support
+                }
+                result_hits = self.retriever.retrieve(LAB_RESULTS_QUERY, passage_texts)
+                # Include adjoining windows on the page. A table heading can rank
+                # above the rows; the rows still need to pass the same NLI checks.
+                following_windows = [
+                    (index + 1, relevance) for index, relevance in result_hits
+                    if 0 <= index < len(passages) - 1
+                    and passages[index].document_id == passages[index + 1].document_id
+                    and passages[index].page == passages[index + 1].page
+                ]
+                ranked = [
+                    *ranked, *self.retriever.retrieve(LAB_EVIDENCE_QUERY, passage_texts),
+                    *result_hits, *following_windows,
+                ]
             selected=[]; seen=set()
             for idx, relevance in ranked:
                 if not 0 <= idx < len(passages) or not math.isfinite(relevance): continue
                 p=passages[idx]
+                if criterion.laboratory_validation and p.document_id not in scoped_docs:
+                    continue
                 if p.target and p.target.casefold()!=target.technology.casefold(): continue
                 key=(p.document_id,p.text.strip().casefold())
                 if key in seen: continue
@@ -85,20 +130,37 @@ class EvidenceEngine:
             predictions = self._predict([(p.text, criterion.hypothesis) for p, _ in selected])
             needs_completed_test = criterion.trl is not None and criterion.trl >= 3
             needs_triple = criterion.trl in (4, 5)
+            if criterion.laboratory_validation:
+                outcomes = self._predict([(p.text, LAB_OUTCOME) for p, _ in selected])
+                measured = [p.text for (p, _), score in zip(selected, outcomes) if score[0] >= self.support]
+                claims = (LAB_ENVIRONMENT, *LAB_ARTICLE_CLAIMS)
+                facts = self._predict([(text, claim) for text in measured for claim in claims]) if measured else []
+                by_passage = {}
+                for index, text in enumerate(measured):
+                    start = index * len(claims)
+                    environment, *article = (row[0] for row in facts[start:start + len(claims)])
+                    by_passage[text] = min(environment, max(article))
+                support_scores = [
+                    min(by_passage.get(p.text, 0.0), outcome[0])
+                    for (p, _), outcome in zip(selected, outcomes)
+                ]
+            else:
+                support_scores = [scores[0] for scores in predictions]
             candidates = [
-                (p, relevance, scores[0])
-                for (p, relevance), scores in zip(selected, predictions)
-                if scores[0] >= self.support
+                (p, relevance, score)
+                for (p, relevance), score in zip(selected, support_scores)
+                if score >= self.support
             ]
             # Artifact, environment and outcome must come from the same passage.
             # Cache these criterion-independent checks across the checklist.
             required = []
             if needs_completed_test:
                 required = [hypotheses[3]]
-            if criterion.trl is not None and criterion.trl >= 4:
-                required.append(hypotheses[0])
-            if needs_triple:
-                required.extend(hypotheses[1:3])
+            if not criterion.laboratory_validation:
+                if criterion.trl is not None and criterion.trl >= 4:
+                    required.append(hypotheses[0])
+                if needs_triple:
+                    required.extend(hypotheses[1:3])
             missing = list(dict.fromkeys(
                 (p.text, h) for p, _, _ in candidates for h in required if (p.text, h) not in checks
             ))
@@ -126,8 +188,10 @@ class EvidenceEngine:
         chosen=None
         for level in levels:
             ids=[c.id for c in criteria if c.trl==level]
-            if ids and all(states[cid]=="met" for cid in ids): chosen=level
-            else: break
+            if all(states[cid] == "met" for cid in ids):
+                chosen = level
+            elif require_consecutive:
+                break
         if remaining_ms() <= 0:
             return self.abstain(criteria, "Time budget exhausted after inference", budget_exhausted=True)
         blocked=[]

@@ -4,8 +4,8 @@ An offline PDF assessment engine for APCTT's Technology Readiness Level (TRL) ta
 
 1. Extract page text, retaining the exact source spans.
 2. Embed passages with MiniLM and rerank the candidates with a cross-encoder.
-3. Check each criterion with DeBERTa. For contradictions, also test whether the passage supports an explicit denial. For laboratory and relevant-environment validation, require the test article, environment and measured or observed outcome in the same passage.
-4. Return criterion judgments, supporting pages and the highest supported consecutive TRL in the supplied checklist. A missing checkpoint is a model initialization error. Insufficient evidence yields an abstention.
+3. Check each criterion with DeBERTa. For contradictions, also test whether the passage supports an explicit denial. For laboratory and relevant-environment validation, require the test article, environment and measured or observed outcome in the same passage. The official C04 path additionally retrieves result-focused passages and checks these claims individually in reports linked to the target.
+4. Return criterion judgments and supporting pages. The APCTT checklist estimates the highest level with direct evidence. Research checklists require support across consecutive listed levels. A missing checkpoint is a model initialization error. Insufficient evidence yields an abstention.
 
 ## Verify on a Windows PC
 
@@ -65,4 +65,4 @@ The example checklist is a small integration check for the report's wave-tank ex
 
 `python -m unittest discover -s tests` checks model failure handling, criterion logic and exact-span behavior with deterministic fixtures.
 
-The APCTT 0.5.0 CPU development server accepted the adapter's twelve-criterion result for the 26-page RM3 report in 73.5 seconds, including loading. The official-checklist run abstained. Evaluating classification and citation accuracy requires labeled reports. This repository contains the implementation and development instructions. Event CUDA performance and submission ZIP validation require separate runs.
+The APCTT 0.5.0 development server returned TRL 4 for the 26-page RM3 report on CPU in 140.6 seconds, including loading. The official C04 judgment cited the measured tank-test response in Table 4 on PDF page 13. The quoted span was verified against that page. This is a regression check for a single report. Evaluating classification and citation accuracy requires labeled reports. This repository contains the implementation and development instructions. Event CUDA performance and submission ZIP validation require separate runs.
