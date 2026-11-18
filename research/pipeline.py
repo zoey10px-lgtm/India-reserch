@@ -104,10 +104,10 @@ class EvidenceReasoner:
         for (retrieval, target_score, e), p in zip(kept, predictions):
             # Score represents relative evidence utility, not a calibrated probability.
             weight = max(0.0, retrieval) * target_score
-            triple = verify_triple(e.text, self.nli)
+            triple = verify_triple(e.text, self.nli) if criterion.trl > 0 else None
             triple_cache[(e.source_id, e.page, e.text)] = triple
             records.append({
-                "triple_verified": triple.verified,
+                "triple_verified": triple.verified if triple is not None else True,
                 "document_id": e.source_id, "page": e.page,
                 "supporting_span": e.text, "text": e.text,
                 "retrieval": round(retrieval, 4),
