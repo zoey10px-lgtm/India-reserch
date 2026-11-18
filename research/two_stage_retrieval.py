@@ -19,14 +19,22 @@ class TwoStageRetriever:
         self.reranker = CrossEncoder(reranker_path, device=device, local_files_only=True)
         self.candidate_k = candidate_k
         self.final_k = final_k
+        self._passages = None
+        self._vectors = None
 
     def retrieve(self, query: str, passages: list[str]) -> list[tuple[int, float]]:
         if not passages:
             return []
         import numpy as np
-        vectors = self.encoder.encode([query] + passages, batch_size=32,
-                                      normalize_embeddings=True, show_progress_bar=False)
-        sims = np.asarray(vectors[1:]) @ np.asarray(vectors[0])
+        # Cache document embeddings across the twelve criterion queries.
+        # Every case uses a fresh worker; no cross-case persistence.
+        if self._passages is not passages and self._passages != passages:
+            self._vectors = np.asarray(self.encoder.encode(
+                passages, batch_size=32, normalize_embeddings=True, show_progress_bar=False))
+            self._passages = list(passages)
+        query_vector = np.asarray(self.encoder.encode(
+            [query], batch_size=1, normalize_embeddings=True, show_progress_bar=False))[0]
+        sims = self._vectors @ query_vector
         indices = np.argsort(-sims)[:self.candidate_k].tolist()
         pairs = [(query, passages[i]) for i in indices]
         scores = self.reranker.predict(pairs, batch_size=16)
