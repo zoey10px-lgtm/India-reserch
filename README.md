@@ -65,4 +65,14 @@ The example checklist is a small integration check for the report's wave-tank ex
 
 `python -m unittest discover -s tests` checks model failure handling, criterion logic and exact-span behavior with deterministic fixtures.
 
+## Build the Stage 1 ZIP
+
+With the extracted APCTT 0.5.0 kit and its packaging dependencies installed, run:
+
+```bash
+python tools/build_submission.py --kit /path/to/apctt-kit --team YOUR_REGISTERED_TEAM_ID --output ./dist
+```
+
+The builder assembles the CPU package, declares the three pinned models, and runs the official packer and archive checker. Exit code 2 means `VALID_WITH_REVIEW`. Check the data-source review items before handover. The builder refuses to overwrite an existing archive.
+
 The APCTT 0.5.0 development server returned TRL 4 for the 26-page RM3 report on CPU in 140.6 seconds, including loading. The official C04 judgment cited the measured tank-test response in Table 4 on PDF page 13. The quoted span was verified against that page. This is a regression check for a single report. Evaluating classification and citation accuracy requires labeled reports. This repository contains the implementation and development instructions. Event CUDA performance and submission ZIP validation require separate runs.

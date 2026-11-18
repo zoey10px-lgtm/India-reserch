@@ -11,10 +11,16 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "research"
 DEST = ROOT / "participant_module" / "research"
 
+def stage_research(destination):
+    shutil.copytree(SRC, destination, ignore=shutil.ignore_patterns(
+        "__pycache__", "*.pyc", "demo.py", "setup_models.py",
+    ))
+
+
 def main():
     if DEST.exists():
         shutil.rmtree(DEST)
-    shutil.copytree(SRC, DEST, ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "demo.py", "setup_models.py"))
+    stage_research(DEST)
     (ROOT / "participant_module" / "__init__.py").touch(exist_ok=True)
     print(f"Staged {DEST}; now run the official kit validation.")
 
