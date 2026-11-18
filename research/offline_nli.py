@@ -55,7 +55,7 @@ class OfflineNLI:
         # The catalogue model pools neutral and contradiction into not_entailment.
         # A contradiction needs affirmative support for the explicit denial.
         negated_pairs = [
-            (premise, f"It is false that {hypothesis.strip().rstrip('.')}.")
+            (premise, self._denial(hypothesis))
             for premise, hypothesis in pairs
         ]
         scores = self._probabilities(pairs + negated_pairs, batch_size)
@@ -67,6 +67,28 @@ class OfflineNLI:
             contradiction = min(negative, 1 - positive)
             result.append(Inference(entailment, contradiction, max(0.0, 1 - entailment - contradiction)))
         return result
+
+    def passing_support(self, pairs, threshold, batch_size=12):
+        """Return exact entailment for passing pairs and zero for the rest."""
+        if not pairs:
+            return []
+        index = self.labels["entailment"]
+        positive = [row[index] for row in self._probabilities(pairs, batch_size)]
+        passing = [i for i, score in enumerate(positive) if score >= threshold]
+        result = [0.0] * len(pairs)
+        if self.binary and passing:
+            denials = [(pairs[i][0], self._denial(pairs[i][1])) for i in passing]
+            for i, row in zip(passing, self._probabilities(denials, batch_size)):
+                score = min(positive[i], 1 - row[index])
+                result[i] = score if score >= threshold else 0.0
+        else:
+            for i in passing:
+                result[i] = positive[i]
+        return result
+
+    @staticmethod
+    def _denial(hypothesis):
+        return f"It is false that {hypothesis.strip().rstrip('.')}."
 
     def predict(self, premise: str, hypothesis: str) -> Inference:
         return self.predict_batch([(premise, hypothesis)])[0]

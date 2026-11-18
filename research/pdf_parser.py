@@ -8,8 +8,14 @@ import re
 
 from .engine import Evidence
 
-SENTENCE = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\"'])")
-SPACES = re.compile(r"[ \t]+")
+SECTION_HEADING = re.compile(
+    r"^[ \t]*(?:[1-9]\d?[.)]?[ \t]+)?"
+    r"(references(?: cited)?|bibliography|literature cited|"
+    r"appendix(?:[ \t]+[A-Z0-9])?(?:[.:][^\r\n]*)?|"
+    r"results(?: and discussion)?|discussion|conclusions?(?: and recommendations)?|"
+    r"introduction|(?:materials and )?methods|methodology)[ \t\r]*$",
+    re.IGNORECASE | re.MULTILINE,
+)
 
 
 @dataclass(frozen=True)
@@ -56,14 +62,35 @@ def read_pdf(path: str, document_id: str, remaining_ms=None, safety_ms: int = 18
         return result
 
 
+def _sections(pages):
+    section_by_document = {}
+    for page in pages:
+        section = section_by_document.get(page.document_id, "")
+        text = page.text or ""
+        start = 0
+        for heading in SECTION_HEADING.finditer(text):
+            if start < heading.start() and section != "bibliography":
+                yield page, section, text[start:heading.start()]
+            title = heading[1].casefold()
+            if title.startswith(("references", "bibliography", "literature cited")):
+                section = "bibliography"
+            elif title.startswith(("result", "discussion", "conclusion")):
+                section = "results"
+            else:
+                section = ""
+            start = heading.start()
+        if start < len(text) and section != "bibliography":
+            yield page, section, text[start:]
+        section_by_document[page.document_id] = section
+
+
 def extract_windows(pages: list[Page], max_chars: int = 1000, min_chars: int = 20) -> list[Evidence]:
     """Exact-span chunks: every output is a verbatim substring of page text.
 
     Preserve whitespace and offsets. No paraphrasing or cleaned quotations.
     """
     evidence = []
-    for page in pages:
-        text = page.text or ""
+    for page, section, text in _sections(pages):
         offset = 0
         while offset < len(text):
             end = min(len(text), offset + max_chars)
@@ -79,7 +106,7 @@ def extract_windows(pages: list[Page], max_chars: int = 1000, min_chars: int = 2
                 end = min(len(text), offset + max_chars)
             segment = text[offset:end]
             if len(segment.strip()) >= min_chars:
-                evidence.append(Evidence(page.number, segment, source_id=page.document_id))
+                evidence.append(Evidence(page.number, segment, section=section, source_id=page.document_id))
             if end == len(text):
                 break
             # Carry nearby lines into the next window when a finding straddles a boundary.

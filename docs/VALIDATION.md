@@ -1,5 +1,20 @@
 # Stage 1 validation
 
+## Oops-Spotters 0.2.0
+
+The APCTT 0.5.0 development server loaded the extracted final archive with verified package digest `929ae30d85645d529eafbefb72eae5a7ca3ce12e24af41d1e142d55d6f129573`. The official packer and archive checker returned `VALID_WITH_REVIEW` for the two NREL data-source notices.
+
+- The HERO report returned TRL 2. C06 was insufficient and the previously cited planning paragraph was excluded. Other parts of the report describe ocean deployments. This run did not establish a C06 citation for them.
+- The stream temperature model returned TRL 3 and met C03. The exact spans on PDF pages 11 and 12 describe test-period results and measured performance metrics.
+- The official example with missing measurements abstained.
+- RM3 returned TRL 4 with C04 met in 146.7 seconds in the final archive run, including model load. The cited span is on PDF page 13; the previous C01 bibliography citation is absent.
+- A preliminary RM3 run hit the fixed 25-second reserve near the end of the checklist. The final package scales this reserve to the remaining criteria and keeps the worker's 180-second case deadline. The HERO, stream temperature and missing-measurements runs above predate this reserve-only change.
+- With the actual catalogue models, a controlled example describing a planned field test did not satisfy C06. A separate example describing completed operation in the intended conditions satisfied C06.
+
+Bibliography sections are omitted from evidence. C03 searches results sections within reports linked to the target. C06 checks completed operation and the target environment in the same passage. The tests do not establish expert-label accuracy or GPU performance.
+
+## Historical baseline 0.1.0
+
 The CPU dry-run archive was built with APCTT participant kit 0.5.0. Its participant module and assets had SHA-256 package digest `fab5a768f42bbbd4c3a8f32ff23f906c610072723978ba28a85bf9a924c437cd`. The development server verified the digest after fresh extraction. The archive checker returned `VALID_WITH_REVIEW` because the two NREL report sources use publication notices as their declared terms. The dry-run team ID is `INDIA-RESEARCH-DRY-RUN`.
 
 ## Results

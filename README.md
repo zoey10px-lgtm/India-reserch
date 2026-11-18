@@ -5,6 +5,7 @@ An offline PDF assessment engine for APCTT's Technology Readiness Level (TRL) ta
 1. Extract page text, retaining the exact source spans.
 2. Embed passages with MiniLM and rerank the candidates with a cross-encoder.
 3. Check each criterion with DeBERTa. For contradictions, also test whether the passage supports an explicit denial. For laboratory and relevant-environment validation, require the test article, environment and measured or observed outcome in the same passage. The official C04 path additionally retrieves result-focused passages and checks these claims individually in reports linked to the target.
+   Bibliography sections are excluded from evidence. Under the official checklist, C03 also searches results sections and C06 requires support for an actual demonstration in the intended environment in the cited passage.
 4. Return criterion judgments and supporting pages. The APCTT checklist estimates the highest level with direct evidence. Research checklists require support across consecutive listed levels. A missing checkpoint is a model initialization error. Insufficient evidence yields an abstention.
 
 ## Verify on a Windows PC
@@ -75,4 +76,4 @@ python tools/build_submission.py --kit /path/to/apctt-kit --team YOUR_REGISTERED
 
 The builder assembles the CPU package, declares the three pinned models, and runs the official packer and archive checker. Exit code 2 means `VALID_WITH_REVIEW`. Check the data-source review items before handover. The builder refuses to overwrite an existing archive.
 
-The APCTT 0.5.0 development server returned TRL 4 for the 26-page RM3 report on CPU in 140.6 seconds, including loading. The official C04 judgment cited the measured tank-test response in Table 4 on PDF page 13. The quoted span was verified against that page. This is a regression check for a single report. Evaluating classification and citation accuracy requires labeled reports. This repository contains the implementation and development instructions. Event CUDA performance and submission ZIP validation require separate runs.
+The APCTT 0.5.0 development server verifies the cold-worker output and exact evidence locators. See [Stage 1 validation](docs/VALIDATION.md) for the archive tests and evidence observations. Evaluating classification and citation accuracy requires labeled reports. Event CUDA performance remains unverified.

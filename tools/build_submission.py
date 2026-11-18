@@ -55,7 +55,7 @@ def main():
     bases = json.loads(base_path.read_text(encoding="utf-8"))
     models = [{"catalog_id": model[0]} for model in DEFAULT_MODELS.values()]
     metadata = {
-        "team": args.team, "package_id": "india-research", "package_version": "0.1.0",
+        "team": args.team, "package_id": "india-research", "package_version": "0.2.0",
         "declared_package_sha256": None,
     }
 

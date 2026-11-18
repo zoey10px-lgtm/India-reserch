@@ -40,6 +40,14 @@ class ProductionTests(unittest.TestCase):
     def test_timeout(self):
         p=[Passage("doc",2,"A prototype tested in laboratory","A")]
         self.assertEqual(self.engine.evaluate(p,self.criteria,self.target,remaining_ms=lambda:1000)["status"],"abstained")
+    def test_short_final_criterion_can_finish_inside_remaining_budget(self):
+        passages = [Passage("doc", 2, "A prototype tested in laboratory", "A")]
+        result = self.engine.evaluate(
+            passages, self.criteria[:1], self.target, remaining_ms=lambda: 9000,
+        )
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(result["predicted_trl"], 4)
+
     def test_quality_cap(self):
         p=[Passage("doc",2,"A prototype tested in laboratory and results measured","A")]
         self.assertIsNone(self.engine.evaluate(p,self.criteria,self.target,quality_caps={"C12":3})["predicted_trl"])

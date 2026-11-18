@@ -76,14 +76,18 @@ def parse_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None
 
 
 def assessment_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None = None) -> list[EvidenceCriterion]:
+    profiles = {
+        (3, "proof of concept (trl 3)"): "proof",
+        (4, "laboratory validation (trl 4)"): "lab",
+        (6, "prototype in relevant environment (trl 6)"): "demonstration",
+    }
     descriptions = {str(item["criterion_id"]): item["description"] for item in checklist["criteria"]}
-    return [
-        EvidenceCriterion(
-            c.id, c.hypothesis, c.trl if c.required else None,
-            laboratory_validation=(
-                is_official_checklist(checklist) and c.trl == 4
-                and descriptions[c.id].partition(":")[0].strip().casefold() == "laboratory validation (trl 4)"
-            ),
-        )
-        for c in parse_criteria(checklist, explicit_levels)
-    ]
+    result = []
+    for criterion in parse_criteria(checklist, explicit_levels):
+        heading = descriptions[criterion.id].partition(":")[0].strip().casefold()
+        profile = profiles.get((criterion.trl, heading), "") if is_official_checklist(checklist) else ""
+        result.append(EvidenceCriterion(
+            criterion.id, criterion.hypothesis, criterion.trl if criterion.required else None,
+            laboratory_validation=profile == "lab", evidence_profile=profile if profile != "lab" else "",
+        ))
+    return result

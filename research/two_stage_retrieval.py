@@ -26,7 +26,7 @@ class TwoStageRetriever:
         self._passages = None
         self._vectors = None
 
-    def retrieve(self, query: str, passages: list[str]) -> list[tuple[int, float]]:
+    def retrieve(self, query: str, passages: list[str], *, eligible_indices=None) -> list[tuple[int, float]]:
         if not passages:
             return []
         import numpy as np
@@ -39,7 +39,10 @@ class TwoStageRetriever:
         query_vector = np.asarray(self.encoder.encode(
             [self.query_prefix + query], batch_size=1, normalize_embeddings=True, show_progress_bar=False))[0]
         sims = self._vectors @ query_vector
-        indices = np.argsort(-sims)[:self.candidate_k].tolist()
+        eligible = np.arange(len(passages)) if eligible_indices is None else np.asarray(eligible_indices, dtype=int)
+        indices = eligible[np.argsort(-sims[eligible])[:self.candidate_k]].tolist()
+        if not indices:
+            return []
         pairs = [(query, passages[i]) for i in indices]
         scores = self.reranker.predict(pairs, batch_size=16)
         ranked = sorted(zip(indices, scores), key=lambda x: -float(x[1]))

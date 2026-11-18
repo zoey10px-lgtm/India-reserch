@@ -13,6 +13,9 @@ class _NLIAdapter:
     def __init__(self, model):
         self.model = model
 
+    def passing_support(self, pairs, threshold):
+        return self.model.passing_support(pairs, threshold)
+
     def predict_batch(self, pairs):
         return [
             (item.entailment, item.contradiction, item.neutral)
@@ -48,7 +51,7 @@ def assess_pdfs(engine, documents, criteria, target, *, remaining_ms, quality_ca
         if remaining_ms() < 30000:
             return engine.abstain(criteria, "Time budget too low to read all documents", budget_exhausted=True)
         pages = read_pdf(str(path), str(document_id), remaining_ms=remaining_ms)
-        passages.extend(Passage(e.source_id, e.page, e.text) for e in extract_windows(pages))
+        passages.extend(Passage(e.source_id, e.page, e.text, section=e.section) for e in extract_windows(pages))
     return engine.evaluate(
         passages, criteria, target, remaining_ms=remaining_ms, quality_caps=quality_caps,
         require_consecutive=require_consecutive,
