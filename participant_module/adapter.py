@@ -39,9 +39,9 @@ class AssessmentModule:
         parsed = parse_criteria(self.checklist, self.settings.get("criterion_levels"))
         self.criteria = [Criterion(c.id, c.hypothesis, c.trl if c.required else None) for c in parsed]
         store = Path(os.environ.get("APCTT_MODEL_STORE", "/nonexistent"))
-        names = [self.settings.get(k) for k in (
-            "nli_model_path", "encoder_model_path", "reranker_model_path"
-        )]
+        names = [self.settings.get("nli_model_path"),
+                 self.settings.get("encoder_model_path", "all-minilm-l6-v2"),
+                 self.settings.get("reranker_model_path")]
         if not all(names):
             self.engine = None
             return
@@ -89,12 +89,12 @@ class AssessmentModule:
                 ))
             passages = []
             for e in extract_windows(pages):
-                passages.append(Passage(e.source_id, e.page, e.text, section=e.section))
+                passages.append(Passage(e.source_id, e.page, e.text, section=getattr(e, "section", "")))
             info = case["assessment_target"]
             target = Target(
-                str(info.get("assessment_target") or info.get("technology") or info.get("name") or ""),
-                str(info.get("intended_application") or ""),
-                str(info.get("intended_environment") or ""),
+                str(info.get("description") or info.get("target_id") or ""),
+                str(case.get("intended_application") or ""),
+                str(case.get("intended_environment") or ""),
             )
             result = self.engine.evaluate(
                 passages, self.criteria, target,
