@@ -13,6 +13,7 @@ from typing import Any
 
 from .engine import Criterion, Evidence, Inference, tokens
 from .graph import build_edges
+from .verification import TargetContext, verify_triple, quality_gate, grounded_evidence, confidence_features
 
 
 @dataclass
@@ -44,8 +45,8 @@ class EvidenceReasoner:
         self.encoder = encoder
         self.settings = settings or EngineSettings()
 
-    def _retrieve(self, evidence: list[Evidence], criterion: Criterion) -> list[tuple[float, Evidence]]:
-        query = criterion.hypothesis
+    def _retrieve(self, evidence: list[Evidence], criterion: Criterion, target: TargetContext) -> list[tuple[float, Evidence]]:
+        query = target.query(criterion.hypothesis)
         query_tokens = tokens(query)
         dense = None
         if self.encoder is not None:
@@ -75,8 +76,8 @@ class EvidenceReasoner:
         overlap = len(target_words & tokens(e.text)) / max(1, len(target_words))
         return 0.35 + 0.55*overlap
 
-    def _criterion(self, criterion: Criterion, evidence: list[Evidence], target: str) -> dict[str, Any]:
-        candidates = self._retrieve(evidence, criterion)
+    def _criterion(self, criterion: Criterion, evidence: list[Evidence], target: TargetContext) -> dict[str, Any]:
+        candidates = self._retrieve(evidence, criterion, target)
         dedup = set()
         kept = []
         for retrieval, e in candidates:
@@ -84,7 +85,7 @@ class EvidenceReasoner:
             if signature in dedup:
                 continue
             dedup.add(signature)
-            target_score = self._target_score(e, target)
+            target_score = self._target_score(e, target.technology)
             if target_score < self.settings.min_target_score:
                 continue
             kept.append((retrieval, target_score, e))
@@ -93,10 +94,14 @@ class EvidenceReasoner:
             self.nli.predict(p, h) for p, h in pairs
         ]
         records = []
+        triple_cache = {}
         for (retrieval, target_score, e), p in zip(kept, predictions):
             # Score represents relative evidence utility, not a calibrated probability.
             weight = max(0.0, retrieval) * target_score
+            triple = verify_triple(e.text, self.nli)
+            triple_cache[(e.source_id, e.page, e.text)] = triple
             records.append({
+                "triple_verified": triple.verified,
                 "document_id": e.source_id, "page": e.page,
                 "supporting_span": e.text, "text": e.text,
                 "retrieval": round(retrieval, 4),
@@ -108,7 +113,7 @@ class EvidenceReasoner:
             })
         graph = build_edges(records)
         supporters = [r for r in records if r["entailment"] >= self.settings.min_entailment
-                      and r["weight"] >= self.settings.min_support_weight]
+                      and r["weight"] >= self.settings.min_support_weight and r["triple_verified"]]
         opposers = [r for r in records if r["contradiction"] >= self.settings.min_contradiction
                     and r["weight"] >= self.settings.min_support_weight]
         if supporters and opposers:
@@ -132,10 +137,11 @@ class EvidenceReasoner:
                       "records": records},
         }
 
-    def assess(self, evidence: list[Evidence], criteria: list[Criterion], target: str) -> dict[str, Any]:
+    def assess(self, evidence: list[Evidence], criteria: list[Criterion], target: str | TargetContext) -> dict[str, Any]:
         if not evidence or not criteria:
             return {"status": "abstained", "predicted_trl": None, "criteria": []}
-        results = [self._criterion(c, evidence, target) for c in criteria]
+        context = target if isinstance(target, TargetContext) else TargetContext(str(target), '', '')
+        results = [self._criterion(c, evidence, context) for c in criteria]
         # TRL levels are cumulative: a higher level cannot be claimed when
         # a required lower-level criterion is missing or contradictory.
         by_level = sorted({c.trl for c in criteria})
@@ -145,7 +151,12 @@ class EvidenceReasoner:
             if not group or not all(r["state"] == "met" for _, r in group):
                 break
             chosen = level
+        statuses = {r["id"]: r["state"] for r in results}
+        gate = quality_gate(statuses) if all(k in statuses for k in ("C10", "C11", "C12")) else {"pass": False, "missing": ["C10-C12 mapping required"]}
+        if not gate["pass"]:
+            chosen = None
         return {
+            "quality_gate": gate,
             "status": "completed" if chosen is not None else "abstained",
             "predicted_trl": chosen,
             "criteria": results,
