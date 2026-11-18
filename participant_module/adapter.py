@@ -18,6 +18,7 @@ from .research.pdf_parser import read_pdf, extract_windows
 from .research.pipeline import EvidenceReasoner
 from .research.verification import TargetContext, grounded_evidence
 from .research.two_stage_retrieval import TwoStageRetriever
+from .research.criteria_policy import parse_criteria, DecisionPolicy
 
 
 class AssessmentModule:
@@ -28,18 +29,8 @@ class AssessmentModule:
 
     def load(self, config: Mapping[str, Any], asset_root: Path) -> None:
         self.checklist = config["checklist"]
-        self.criteria = []
-        for item in self.checklist["criteria"]:
-            desc = str(item.get("description", ""))
-            match = re.search(r"\bTRL\s*([1-9])\b", desc, re.I)
-            if not match and str(item["criterion_id"]) not in ("C10", "C11", "C12"):
-                continue
-            self.criteria.append(Criterion(
-                id=str(item["criterion_id"]), trl=(0 if str(item["criterion_id"]) in ("C10", "C11", "C12") else int(match.group(1))),
-                hypothesis=re.sub(r"\(?TRL\s*[1-9]\)?", "", desc, flags=re.I).strip(),
-                required=(str(item["criterion_id"]) not in ("C10", "C11", "C12")),
-            ))
         settings = config.get("module", {}).get("settings", {}) or {}
+        self.criteria = parse_criteria(self.checklist, settings.get("criterion_levels"))
         model_rel = settings.get("nli_model_path") or os.environ.get("APCTT_NLI_MODEL_PATH")
         if not model_rel:
             self.reasoner = None
@@ -62,7 +53,10 @@ class AssessmentModule:
                 if not reranker_path.is_absolute():
                     reranker_path = store / reranker_path
                 retriever = TwoStageRetriever(str(encoder_path), str(reranker_path), device=device)
-            self.reasoner = EvidenceReasoner(nli=nli, retriever=retriever)
+            self.reasoner = EvidenceReasoner(
+                nli=nli, retriever=retriever,
+                decision_policy=DecisionPolicy(settings.get("quality_caps")),
+            )
         except Exception as exc:
             print(f"NLI initialization failed: {exc!r}", file=sys.stderr)
             self.reasoner = None
