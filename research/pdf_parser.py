@@ -68,10 +68,10 @@ def extract_windows(pages: list[Page], max_chars: int = 650, min_chars: int = 20
         while offset < len(text):
             end = min(len(text), offset + max_chars)
             if end < len(text):
-                split = max(text.rfind("\\n", offset + max_chars // 2, end),
+                split = max(text.rfind("\n", offset + max_chars // 2, end),
                             text.rfind(". ", offset + max_chars // 2, end))
                 if split > offset:
-                    end = split + (1 if text[split] == "\\n" else 2)
+                    end = split + (1 if text[split] == "\n" else 2)
             if end <= offset:
                 end = min(len(text), offset + max_chars)
             segment = text[offset:end]
