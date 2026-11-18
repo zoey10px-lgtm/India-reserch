@@ -15,6 +15,7 @@ from .research.offline_nli import OfflineNLI
 from .research.two_stage_retrieval import TwoStageRetriever
 from .research.pdf_parser import read_pdf, extract_windows
 from .research.criteria_policy import parse_criteria
+from .research.catalog import resolve_catalog_model
 
 
 class _NLIAdapter:
@@ -39,13 +40,17 @@ class AssessmentModule:
         parsed = parse_criteria(self.checklist, self.settings.get("criterion_levels"))
         self.criteria = [Criterion(c.id, c.hypothesis, c.trl if c.required else None) for c in parsed]
         store = Path(os.environ.get("APCTT_MODEL_STORE", "/nonexistent"))
-        names = [self.settings.get("nli_model_path"),
-                 self.settings.get("encoder_model_path", "all-minilm-l6-v2"),
-                 self.settings.get("reranker_model_path")]
-        if not all(names):
+        ids = [self.settings.get("nli_catalog_id"),
+               self.settings.get("encoder_catalog_id", "all-minilm-l6-v2"),
+               self.settings.get("reranker_catalog_id")]
+        if not all(ids):
             self.engine = None
             return
-        paths = [Path(x) if Path(x).is_absolute() else store / x for x in names]
+        catalog_path = self.settings.get("catalog_path") or os.environ.get("APCTT_MODEL_CATALOG")
+        if not catalog_path:
+            self.engine = None
+            return
+        paths = [resolve_catalog_model(cid, catalog_path, store) for cid in ids]
         device = config.get("compute", {}).get("device", "cpu")
         try:
             nli = OfflineNLI(str(paths[0]), device=device)
