@@ -6,6 +6,7 @@ official criterion ID exists. Quality criteria C10-C12 are NEVER TRL levels.
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Mapping
+import re
 from .engine import Criterion
 
 QUALITY_IDS = frozenset(("C10", "C11", "C12"))
@@ -39,16 +40,18 @@ def parse_criteria(checklist: Mapping, explicit_levels: Mapping[str, int] | None
     result = []
     for item in items:
         cid = str(item["criterion_id"])
+        canonical = re.search(r"(?:^|-)C(0?[1-9]|1[0-2])$", cid, re.I)
+        short_id = f"C{int(canonical.group(1)):02d}" if canonical else cid
         desc = str(item.get("description", "")).strip()
         if not desc:
             raise ValueError(f"Missing description for {cid}")
-        if cid in QUALITY_IDS:
+        if short_id in QUALITY_IDS:
             level = 0
         elif cid in explicit_levels:
             level = int(explicit_levels[cid])
-        elif cid.startswith("C") and cid[1:].isdigit() and 1 <= int(cid[1:]) <= 9:
+        elif canonical and 1 <= int(canonical.group(1)) <= 9:
             # Only use this mapping when official C01-C09 IDs are present.
-            level = int(cid[1:])
+            level = int(canonical.group(1))
         else:
             raise ValueError(f"Unknown criterion-to-TRL mapping: {cid}")
         if level < 0 or level > 9:
