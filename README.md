@@ -27,3 +27,14 @@ python -m research.demo
 - Build FastAPI/Render dashboard only after offline engine contract tests pass.
 
 No private PDFs or benchmark labels are committed. MIT license applies to original code.
+
+## Implementation update (2026-11-18)
+Implemented modules: `research/pdf_parser.py`, `ocr.py`, `two_stage_retrieval.py`, `offline_nli.py`, `verification.py`, `pipeline.py`, `graph.py`, `benchmark.py` and `participant_module/adapter.py`.
+
+**Critical limitations:** The real NLI/embedding/reranker model paths have not been provided or exercised in this environment. The adapter's official C01–C12 mappings and exact output contract must be verified with the competition kit. OCR is available as a module but not yet wired into `read_pdf`. The current evidence graph implements duplicate/conflict candidates, not temporal/entity coreference. Confidence remains uncalibrated (null). The web dashboard and Render deployment are not built. Do not submit this repository without official validation.
+
+### Required model settings
+Configure `module.settings.nli_model_path`, `encoder_model_path`, `reranker_model_path` as locally available, catalogue-approved model directories. The adapter uses `APCTT_MODEL_STORE` to resolve relative paths. It never downloads weights.
+
+### Testing
+`python -m unittest discover -s tests -v` tests deterministic orchestration, not actual model quality. Official kit validation and model inference tests remain required.
