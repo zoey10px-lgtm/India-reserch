@@ -1,0 +1,904 @@
+{
+  "model": "ModernBERT-base fine-tuned evidence classifier",
+  "checkpoint_sha256": "58299660a0804b7104d3650036ea2c6d9893b7ee6ebc71b94a55c09d736cd7d7",
+  "stage_1_to_7_threshold": 0.75,
+  "stage_8_to_9_threshold": 0.98,
+  "quality_threshold": 0.5,
+  "stage_selection": "Highest accepted stage, with independent criterion judgments per passage",
+  "device": "cpu",
+  "cpu_threads": 4,
+  "candidate_windows": 20,
+  "reranked_windows_per_criterion": 4,
+  "timeout_seconds": 180,
+  "elapsed_scope": "Per-PDF fresh process including model loading, retrieval, and assessment",
+  "matching_reference_count": 3,
+  "number_of_pdfs": 6,
+  "baseline_matching_reference_count": 1,
+  "mean_absolute_stage_error": 0.8333333333333334,
+  "exact_match_accuracy": 0.5,
+  "tokenizer": "offline checkpoint tokenizer after comparison with catalog tokenizer",
+  "cases": [
+    {
+      "number": 32,
+      "target": "Hydrologic and hydraulic diagnosis of drainage problems at Offutt Air Force Base",
+      "reference_trl": 5,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 2,
+      "elapsed_seconds": 68.307,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9927,
+          "page": 19
+        },
+        "APCTT-C02": {
+          "score": 0.9879,
+          "page": 18
+        },
+        "APCTT-C03": {
+          "score": 0.9896,
+          "page": 19
+        },
+        "APCTT-C04": {
+          "score": 0.987,
+          "page": 19
+        },
+        "APCTT-C05": {
+          "score": 0.9787,
+          "page": 19
+        },
+        "APCTT-C06": {
+          "score": 0.9851,
+          "page": 19
+        },
+        "APCTT-C07": {
+          "score": 0.9747,
+          "page": 19
+        },
+        "APCTT-C08": {
+          "score": 0.9898,
+          "page": 19
+        },
+        "APCTT-C10": {
+          "score": 0.9874,
+          "page": 19
+        },
+        "APCTT-C11": {
+          "score": 0.9503,
+          "page": 19
+        },
+        "APCTT-C12": {
+          "score": 0.9783,
+          "page": 19
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-032",
+        "assessment_target": {
+          "target_id": "USGS-SDG-032",
+          "description": "Hydrologic and hydraulic diagnosis of drainage problems at Offutt Air Force Base"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 8,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "met",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 18,
+              "supporting_span": "and analysis methods used to evaluate the role of shallow \r\ngroundwater, surface-water drainage network, and river stage \r\non the persistence of standing water on and near Offutt Air \r\nForce Base. The “Approach and Methods” section is divided \r\ninto two subsections. The first subsection documents the meth\u0002ods used to describe the movement of shallow groundwater \r\nand interaction with surface water on and near Offutt Air Force \r\nBase. The second subsection documents the methods used to \r\ndescribe the surface-water drainage system, including flood \r\ninundation mapping and flow-duration analyses, which help \r\ndescribe the effect of increased flows in Papillion Creek and \r\nthe Missouri River on storm-water drainage from Offutt Air \r\nForce Base.\r\nMethods Used to Describe the Movement of \r\nShallow Groundwater and Interaction with \r\nSurface Water\r\nThis section of the report documents the methods used to \r\n"
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C08": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 19,
+              "supporting_span": "8 Floodwater Drainage Assessment of Offutt Air Force Base, Nebraska, 2020–22\r\nSynoptic Groundwater- and Surface-Water-Level\r\nSurveys\r\nDiscrete groundwater-level measurements have been col\u0002lected at Offutt Air Force Base for nearly 20 years to monitor \r\ngroundwater-level trends. Discrete groundwater measure\u0002ments are invaluable to document groundwater-level trends \r\nto provide background information for groundwater remedia\u0002tion studies but may not provide sufficient groundwater-level \r\ninformation to assess the effect of surface water on groundwa\u0002ter movement. To improve the understanding of groundwater \r\nmovement and interaction with surface water under varying \r\nhydrologic conditions, two synoptic groundwater- and surface\u0002water-level surveys were completed during late summer 2020 \r\n(August 31–September 3, 2020) and during spring 2021 \r\n(May 3–5, 2021). "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 40,
+      "target": "Meramec River inundation maps linked to observations and forecasts",
+      "reference_trl": 7,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 1,
+      "elapsed_seconds": 73.977,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9889,
+          "page": 12
+        },
+        "APCTT-C02": {
+          "score": 0.9876,
+          "page": 12
+        },
+        "APCTT-C03": {
+          "score": 0.9774,
+          "page": 12
+        },
+        "APCTT-C04": {
+          "score": 0.954,
+          "page": 12
+        },
+        "APCTT-C05": {
+          "score": 0.9462,
+          "page": 15
+        },
+        "APCTT-C06": {
+          "score": 0.9662,
+          "page": 12
+        },
+        "APCTT-C07": {
+          "score": 0.9519,
+          "page": 12
+        },
+        "APCTT-C10": {
+          "score": 0.9521,
+          "page": 12
+        },
+        "APCTT-C11": {
+          "score": 0.8061,
+          "page": 12
+        },
+        "APCTT-C12": {
+          "score": 0.9065,
+          "page": 12
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-040",
+        "assessment_target": {
+          "target_id": "USGS-SDG-040",
+          "description": "Meramec River inundation maps linked to observations and forecasts"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 15,
+              "supporting_span": "380 acres on the north bank of the Meramec River. The levee \r\nwas simulated in the HEC–RAS model as a lateral structure \r\nwith the area within the levee being represented as a storage \r\narea. For inundation mapping purposes, the landward side of \r\nthe levee is shown as an “area of uncertainty” because there \r\nis uncertainty as to how this area would be inundated in the \r\nevent of the levee overtopping or failing. The calibration run \r\nof the hydraulic model for the December 2015 flood indi\u0002cated that the Valley Park levee was not overtopped during \r\nthat event, in concordance with observation. "
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "a library of flood-inundation maps for four sections of the \r\nlower Meramec River upstream from Eureka, Mo., to near the \r\nmouth of the Meramec River at the Mississippi River (fig. 1).\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for a 37.2-mile (mi) reach \r\nof the Meramec River from upstream near the confluence of \r\nthe Meramec River and the Big River to downstream near the \r\nconfluence of the Meramec River and the Mississippi River, \r\nand the report identifies where on the internet the maps can \r\nbe viewed and ancillary data (geographic information system \r\n[GIS] flood polygons and depth grids) can be downloaded. \r\nThe flood-inundation maps cover a 37.2-mi reach of the lower \r\nMeramec River 3.0 mi upstream from the streamgage for the \r\nMeramec River near Eureka, Mo. (USGS station 07019000), \r\nto near the mouth of the Meramec River (fig. 1). "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 43,
+      "target": "North Platte River inundation-map application",
+      "reference_trl": 7,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 2,
+      "elapsed_seconds": 53.265,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9833,
+          "page": 17
+        },
+        "APCTT-C02": {
+          "score": 0.9823,
+          "page": 17
+        },
+        "APCTT-C03": {
+          "score": 0.9771,
+          "page": 17
+        },
+        "APCTT-C04": {
+          "score": 0.9709,
+          "page": 17
+        },
+        "APCTT-C05": {
+          "score": 0.95,
+          "page": 17
+        },
+        "APCTT-C06": {
+          "score": 0.9664,
+          "page": 17
+        },
+        "APCTT-C07": {
+          "score": 0.9594,
+          "page": 17
+        },
+        "APCTT-C10": {
+          "score": 0.9652,
+          "page": 17
+        },
+        "APCTT-C11": {
+          "score": 0.7937,
+          "page": 11
+        },
+        "APCTT-C12": {
+          "score": 0.9486,
+          "page": 5
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-043",
+        "assessment_target": {
+          "target_id": "USGS-SDG-043",
+          "description": "North Platte River inundation-map application"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 17,
+              "supporting_span": "this study may be described elsewhere in this report.\r\nSummary\r\nA series of 10 digital flood-inundation maps were devel\u0002oped by the U.S. Geological Survey in cooperation with the \r\nCities of Scottsbluff and Gering for the North Platte River at \r\nScottsbluff, Nebraska. The maps cover a reach about 8.8 miles \r\nlong, extending 1.5 miles upstream from the Highway 92 \r\nbridge to 2 miles downstream from the Highway 71 bridge. \r\nThe maps were developed using the U.S. Army Corps of Engi\u0002neers Hydrologic Engineering Centers River Analysis System \r\nand Hydrologic Engineering Centers Geospatial River Analy\u0002sis System programs to compute water-surface profiles and \r\nto delineate estimated flood-inundation areas and depths of \r\nflooding for selected stream stages. The Hydrologic Engineer\u0002ing Centers River Analysis System hydraulic one-dimensional \r\nstep-backwater model was calibrated to the current stage\u0002discharge relation at the North Platte River at Scottsbluff, \r\nNebr., streamgage. "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 11,
+              "supporting_span": "2\r\nFlood-Inundation Maps for the North Platte River at Scottsbluff and Gering, Nebraska, 2018\r\nPurpose and Scope\r\nThis report describes the development of a series of \r\nestimated flood-inundation maps for the North Platte River at \r\nScottsbluff, Nebr., and identifies where the maps can be found \r\nonline and where ancillary data (geographic information sys\u0002tem [GIS] flood polygons and depth grids) can be downloaded. \r\nThe study covers an 8.8-mile (mi) reach of the North Platte \r\nRiver from 1.5 mi upstream from the Highway 92 bridge to \r\n2 mi downstream from the Highway 71 bridge (fig. 1).\r\nThe maps were produced for flood levels referenced to \r\nthe stage recorded at the USGS streamgage on the North Platte \r\nRiver at Scottsbluff, Nebr. (fig. 1; table 1); the streamgage is \r\non the upstream side of Avenue I [Five Rocks Road].\r\nThe maps cover a range in stage from 9 to 18 feet (ft) \r\nabove an arbitrary gage datum. "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 5,
+              "supporting_span": "Suggested citation:\r\nStrauch, K.R., 2019, Flood-inundation maps for the North Platte River at Scottsbluff and Gering, Nebraska, 2018: \r\nU.S. Geological Survey Scientific Investigations Report 2019–5099, 9 p., https://doi.org/10.3133/sir20195099.\r\nAssociated data for this publication:\r\nStrauch, K.R., 2019, Flood-inundation geospatial datasets for the North Platte River at Scottsbluff and Gering, \r\nNebraska: U.S. Geological Survey data release, https://doi.org/10.5066/P9NCAIKN.\r\nISSN 2328-0328 (online)"
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 101,
+      "target": "Low-fidelity aluminum mirror coating breadboard and AlF3 passivation process",
+      "reference_trl": 4,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 4,
+      "elapsed_seconds": 39.82,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.7515,
+          "page": 10
+        },
+        "APCTT-C03": {
+          "score": 0.7595,
+          "page": 10
+        },
+        "APCTT-C04": {
+          "score": 0.8757,
+          "page": 10
+        },
+        "APCTT-C11": {
+          "score": 0.5078,
+          "page": 2
+        },
+        "APCTT-C12": {
+          "score": 0.7192,
+          "page": 10
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-101",
+        "assessment_target": {
+          "target_id": "USGS-SDG-101",
+          "description": "Low-fidelity aluminum mirror coating breadboard and AlF3 passivation process"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 4,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "insufficient evidence",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "insufficient evidence",
+          "APCTT-C06": "insufficient evidence",
+          "APCTT-C07": "insufficient evidence",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "insufficient evidence",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 10,
+              "supporting_span": "4. CONCLUSION\r\nIn summary, the Large Area Plasma Processing System at NRL has demonstrated oxide removal and fluorine\r\npassivation of Al mirrors over a 6” diameter area. The process starts with bare Al samples (provided by the\r\ncoating labs at GSFC), which are processed in the LAPPS reactor. The process removes the oxide and chemically\r\nconvert a pristine top layer of Al into AlF3 (which provides protection from further oxidation) with a thickness\r\nthat could be tuned depending on spectral requirements. The reflectance of these plasma treated samples is\r\napproaching specification requirements for the next generation space telescope mirrors:\r\n• Average R (100-200nm) =81%\r\n• Average R (120-3000nm) = 93%\r\n• R non-uniformity (250−1000nm) < 0.2%"
+            }
+          ],
+          "APCTT-C02": [],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 10,
+              "supporting_span": "4. CONCLUSION\r\nIn summary, the Large Area Plasma Processing System at NRL has demonstrated oxide removal and fluorine\r\npassivation of Al mirrors over a 6” diameter area. The process starts with bare Al samples (provided by the\r\ncoating labs at GSFC), which are processed in the LAPPS reactor. The process removes the oxide and chemically\r\nconvert a pristine top layer of Al into AlF3 (which provides protection from further oxidation) with a thickness\r\nthat could be tuned depending on spectral requirements. The reflectance of these plasma treated samples is\r\napproaching specification requirements for the next generation space telescope mirrors:\r\n• Average R (100-200nm) =81%\r\n• Average R (120-3000nm) = 93%\r\n• R non-uniformity (250−1000nm) < 0.2%"
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 10,
+              "supporting_span": "4. CONCLUSION\r\nIn summary, the Large Area Plasma Processing System at NRL has demonstrated oxide removal and fluorine\r\npassivation of Al mirrors over a 6” diameter area. The process starts with bare Al samples (provided by the\r\ncoating labs at GSFC), which are processed in the LAPPS reactor. The process removes the oxide and chemically\r\nconvert a pristine top layer of Al into AlF3 (which provides protection from further oxidation) with a thickness\r\nthat could be tuned depending on spectral requirements. The reflectance of these plasma treated samples is\r\napproaching specification requirements for the next generation space telescope mirrors:\r\n• Average R (100-200nm) =81%\r\n• Average R (120-3000nm) = 93%\r\n• R non-uniformity (250−1000nm) < 0.2%"
+            }
+          ],
+          "APCTT-C05": [],
+          "APCTT-C06": [],
+          "APCTT-C07": [],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "highly uniform smooth surface (rms roughness < 1.8 nm). Through proper control of processing conditions, we\r\nwere able to generate high optical quality AlF3 protective layers with tunable thickness. This capability allowed\r\nus to fabricate high-reflectivity mirrors optimized at any FUV wavelength starting from ∼ 110 nm, which is the\r\nintrinsic cut-off wavelength of AlF3.\r\nIn this paper, we are reporting on validation experiments to advance the Technology Readiness Level (TRL)\r\nfor these Al+AlF3 mirror coatings produced at LAPPS. These experiments include determining coating uni\u0002formity over the available area inside the LAPPS reactor, environmental testing, microroughness, adhesion, as\r\nwell as polarization studies of these E-beam treated samples. The ultimate goal is to demonstrate the promise\r\nof using this coating technology to deliver reflectance performance plus stability and uniformity over a large\r\narea for a future IR/O/UV space telescope observatory. "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 10,
+              "supporting_span": "4. CONCLUSION\r\nIn summary, the Large Area Plasma Processing System at NRL has demonstrated oxide removal and fluorine\r\npassivation of Al mirrors over a 6” diameter area. The process starts with bare Al samples (provided by the\r\ncoating labs at GSFC), which are processed in the LAPPS reactor. The process removes the oxide and chemically\r\nconvert a pristine top layer of Al into AlF3 (which provides protection from further oxidation) with a thickness\r\nthat could be tuned depending on spectral requirements. The reflectance of these plasma treated samples is\r\napproaching specification requirements for the next generation space telescope mirrors:\r\n• Average R (100-200nm) =81%\r\n• Average R (120-3000nm) = 93%\r\n• R non-uniformity (250−1000nm) < 0.2%"
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C02": "No accepted supporting excerpt.",
+          "APCTT-C05": "No accepted supporting excerpt.",
+          "APCTT-C06": "No accepted supporting excerpt.",
+          "APCTT-C07": "No accepted supporting excerpt.",
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt.",
+          "APCTT-C10": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 102,
+      "target": "Multi-evaporator miniature loop heat pipe proto-flight unit",
+      "reference_trl": 6,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 4,
+      "elapsed_seconds": 50.799,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9341,
+          "page": 3
+        },
+        "APCTT-C02": {
+          "score": 0.8901,
+          "page": 3
+        },
+        "APCTT-C03": {
+          "score": 0.9231,
+          "page": 3
+        },
+        "APCTT-C04": {
+          "score": 0.9677,
+          "page": 3
+        },
+        "APCTT-C05": {
+          "score": 0.9562,
+          "page": 3
+        },
+        "APCTT-C06": {
+          "score": 0.8949,
+          "page": 3
+        },
+        "APCTT-C07": {
+          "score": 0.8231,
+          "page": 3
+        },
+        "APCTT-C10": {
+          "score": 0.7574,
+          "page": 6
+        },
+        "APCTT-C11": {
+          "score": 0.5113,
+          "page": 6
+        },
+        "APCTT-C12": {
+          "score": 0.5981,
+          "page": 6
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-102",
+        "assessment_target": {
+          "target_id": "USGS-SDG-102",
+          "description": "Multi-evaporator miniature loop heat pipe proto-flight unit"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 3,
+              "supporting_span": "American Institute of Aeronautics and Astronautics \r\n3\r\n6. For the Thermal Loop experiment, an LHP Breadboard was built and tested in the laboratory and thermal vacuum \r\nenvironments for the TRL 4 and 5 validations, respectively, and an MLHP proto-flight unit was built and tested in a \r\nthermal vacuum chamber for the TRL 6 validation. In addition, an analytical model has been developed to simulate the \r\nsteady state and transient operation of LHPs. \r\nA Thermal Loop experiment Technology Review Board (TRB), consisting of a group of independent outside LHP \r\nexperts, has been assembled by the New Millennium Program Office to perform the following functions: 1) establish \r\nthe criteria by which the Thermal Loop experiment will be judged to have achieved TRL 4, TRL 5, and TRL 6; 2) \r\nassess the achievement of TRL 4, TRL 5, and TRL 6 by the Thermal Loop experiment; and 3) evaluate the efficacy of \r\nthe Thermal Loop experiment Technology Validation Plan. "
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "Thermal Loop experiment Level 1 requirements (non-flight) and full and minimum success criteria are summarized in \r\nTable 2. \r\nTable 2. Level 1 Requirements and Success Criteria \r\nBaseline Technology Validation/ \r\nMeasurement Requirement Full Project Success \r\nCriteria/Measurement \r\nRequirement \r\nMinimum Project Success \r\nCriteria/Measurement \r\nRequirement \r\n• Heat load-share two loads in \r\nthe range of 0 to 75 W while \r\nthe loads either remove or \r\nadd heat to the system \r\n• Heat load-share two loads in \r\nthe range of 0 to 50 W while \r\nthe loads either remove or \r\nadd heat to the system \r\n• Operate a flight configured, \r\nminiature, multi-evaporator loop \r\nheat pipe for small system \r\napplications capable of an 80% \r\nsuccess rate on a minimum of 20 \r\nstart-ups in a flight-like \r\nenvironment. \r\n• Develop an analytical model \r\nwhich can predict the loop’s \r\ncritical temperatures during steady \r\nstate and transient operation. "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "Thermal Loop experiment Level 1 requirements (non-flight) and full and minimum success criteria are summarized in \r\nTable 2. \r\nTable 2. Level 1 Requirements and Success Criteria \r\nBaseline Technology Validation/ \r\nMeasurement Requirement Full Project Success \r\nCriteria/Measurement \r\nRequirement \r\nMinimum Project Success \r\nCriteria/Measurement \r\nRequirement \r\n• Heat load-share two loads in \r\nthe range of 0 to 75 W while \r\nthe loads either remove or \r\nadd heat to the system \r\n• Heat load-share two loads in \r\nthe range of 0 to 50 W while \r\nthe loads either remove or \r\nadd heat to the system \r\n• Operate a flight configured, \r\nminiature, multi-evaporator loop \r\nheat pipe for small system \r\napplications capable of an 80% \r\nsuccess rate on a minimum of 20 \r\nstart-ups in a flight-like \r\nenvironment. \r\n• Develop an analytical model \r\nwhich can predict the loop’s \r\ncritical temperatures during steady \r\nstate and transient operation. "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "Thermal Loop experiment Level 1 requirements (non-flight) and full and minimum success criteria are summarized in \r\nTable 2. \r\nTable 2. Level 1 Requirements and Success Criteria \r\nBaseline Technology Validation/ \r\nMeasurement Requirement Full Project Success \r\nCriteria/Measurement \r\nRequirement \r\nMinimum Project Success \r\nCriteria/Measurement \r\nRequirement \r\n• Heat load-share two loads in \r\nthe range of 0 to 75 W while \r\nthe loads either remove or \r\nadd heat to the system \r\n• Heat load-share two loads in \r\nthe range of 0 to 50 W while \r\nthe loads either remove or \r\nadd heat to the system \r\n• Operate a flight configured, \r\nminiature, multi-evaporator loop \r\nheat pipe for small system \r\napplications capable of an 80% \r\nsuccess rate on a minimum of 20 \r\nstart-ups in a flight-like \r\nenvironment. \r\n• Develop an analytical model \r\nwhich can predict the loop’s \r\ncritical temperatures during steady \r\nstate and transient operation. "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 103,
+      "target": "Livingstone 2 diagnostic system demonstrated on Earth Observing One",
+      "reference_trl": 7,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 1,
+      "elapsed_seconds": 39.725,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.8693,
+          "page": 2
+        },
+        "APCTT-C02": {
+          "score": 0.8028,
+          "page": 2
+        },
+        "APCTT-C03": {
+          "score": 0.7875,
+          "page": 2
+        },
+        "APCTT-C04": {
+          "score": 0.8077,
+          "page": 2
+        },
+        "APCTT-C06": {
+          "score": 0.7968,
+          "page": 2
+        },
+        "APCTT-C10": {
+          "score": 0.7432,
+          "page": 2
+        },
+        "APCTT-C11": {
+          "score": 0.59,
+          "page": 2
+        },
+        "APCTT-C12": {
+          "score": 0.7192,
+          "page": 2
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-103",
+        "assessment_target": {
+          "target_id": "USGS-SDG-103",
+          "description": "Livingstone 2 diagnostic system demonstrated on Earth Observing One"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 6,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "insufficient evidence",
+          "APCTT-C06": "met",
+          "APCTT-C07": "insufficient evidence",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "* the capability to plan and execute actions to enable mission continuation despite failures (aka recovery). \r\nOver the past several years, NASA Ames Research Center (ARC) has been developing autonomous systems \r\nwith these requirements in mind, and is establishing a track record of mission experience. In 1999, the autonomous \r\nRemote Agent Experiment (RAX) flew on the Deep Space One (DS-1) spacecraft [3] with an earlier version of \r\nLivingstone. Livingstone is a model-based diagnostic engine developed at Ames by the Model-Based Diagnosis and \r\nRecovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ],
+          "APCTT-C05": [],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ],
+          "APCTT-C07": [],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 2,
+              "supporting_span": "Recovery (MBDR) group [2]. Since then, the MDBR group has created the next version of Livingstone, called \r\nLivingstone 2 (L2). L2 was further developed by Integrated Vehicle Health Management (IVHM) applications: the \r\nPropulsion IVHM Technology Experiment for X-Vehicles (PITEX) project [7], performing monitoring and \r\ndiagnosis of a high-fidelity simuIation of the X-34 Main Propulsion System on flight-like hardware; and on the X-37 \r\nIVHM experiment where L2 memory management and coding was modified to meet Boeing’s stringent flight \r\nStandards. \r\nThis paper describes the results of a year-long project in which L2 was uploaded to the Eartb Observing One \r\n(EO-1) satellite to conduct diagnostic tests. EO-1 was developed by NASA Goddard Space Flight Center (GSFC) \r\nunder the New Millenium Program (NMP), and launched in November 2000. EO-1 is. an active earth science \r\nobservation platform, operated by Goddard. "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C05": "No accepted supporting excerpt.",
+          "APCTT-C07": "No accepted supporting excerpt.",
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    }
+  ]
+}

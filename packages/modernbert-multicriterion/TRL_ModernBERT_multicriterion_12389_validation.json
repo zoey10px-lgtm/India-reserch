@@ -1,0 +1,807 @@
+{
+  "model": "ModernBERT-base fine-tuned evidence classifier",
+  "checkpoint_sha256": "58299660a0804b7104d3650036ea2c6d9893b7ee6ebc71b94a55c09d736cd7d7",
+  "stage_1_to_7_threshold": 0.75,
+  "stage_8_to_9_threshold": 0.98,
+  "quality_threshold": 0.5,
+  "stage_selection": "Highest accepted stage, with independent criterion judgments per passage",
+  "device": "cpu",
+  "cpu_threads": 4,
+  "candidate_windows": 20,
+  "reranked_windows_per_criterion": 4,
+  "timeout_seconds": 180,
+  "elapsed_scope": "Per-PDF fresh process including model loading, retrieval, and assessment",
+  "matching_reference_count": 0,
+  "number_of_pdfs": 5,
+  "mean_absolute_stage_error": 3.8,
+  "exact_match_accuracy": 0.0,
+  "tokenizer": "offline checkpoint tokenizer after comparison with catalog tokenizer",
+  "cases": [
+    {
+      "number": 1,
+      "target": "Computational design of CMAS-resistant thermal and environmental barrier coatings",
+      "reference_trl": 1,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 3,
+      "pdf_filename": "TechPort_125310_381274.pdf",
+      "reference_pages": [
+        1
+      ],
+      "matching_named_training_pairs": 0,
+      "matching_named_validation_pairs": 0,
+      "elapsed_seconds": 34.013,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9345,
+          "page": 1
+        },
+        "APCTT-C02": {
+          "score": 0.9131,
+          "page": 1
+        },
+        "APCTT-C03": {
+          "score": 0.923,
+          "page": 1
+        },
+        "APCTT-C04": {
+          "score": 0.8862,
+          "page": 1
+        },
+        "APCTT-C05": {
+          "score": 0.8638,
+          "page": 1
+        },
+        "APCTT-C06": {
+          "score": 0.8958,
+          "page": 1
+        },
+        "APCTT-C07": {
+          "score": 0.8659,
+          "page": 1
+        },
+        "APCTT-C10": {
+          "score": 0.885,
+          "page": 1
+        },
+        "APCTT-C11": {
+          "score": 0.7885,
+          "page": 1
+        },
+        "APCTT-C12": {
+          "score": 0.8637,
+          "page": 1
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-001",
+        "assessment_target": {
+          "target_id": "USGS-SDG-001",
+          "description": "Computational design of CMAS-resistant thermal and environmental barrier coatings"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "A1.03-2120 - Computational design of CMAS-resistant multiphase\r\nthermal and environmental barrier coatings for CMCs\r\nPI: Jiadong Gong , QuesTek Innovations, LLC - Evanston, IL\r\nNON-PROPRIETARY DATA\r\nIDENTIFICATION AND SIGNIFICANCE OF INNOVATION\r\nThe QuesTek’s solution to improve environmental durability, particularly against CMAS attack, is to\r\ndesign multilayer T-EBCs through integrated computational and experimental approach. Since CMAS can\r\nexist with the broad range of composition, developing a viable coating solution through conventional\r\n“trial-and-error” approach is prohibitively time-consuming and impractical. QuesTek will use\r\nthermodynamic approach (i.e., CALPHAD) to predict reaction product from CMAS-coating interaction, and\r\nviscosity of CMAS as a function of evolved compositions during its reaction with T-EBC, which are critical\r\nfor coating design. "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 2,
+      "target": "Lunar South Pole Oxygen Pipeline concept",
+      "reference_trl": 2,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 3,
+      "pdf_filename": "TechPort_158716_317016.pdf",
+      "reference_pages": [
+        1
+      ],
+      "matching_named_training_pairs": 0,
+      "matching_named_validation_pairs": 2,
+      "elapsed_seconds": 30.785,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.8933,
+          "page": 1
+        },
+        "APCTT-C02": {
+          "score": 0.8819,
+          "page": 1
+        },
+        "APCTT-C03": {
+          "score": 0.8982,
+          "page": 1
+        },
+        "APCTT-C04": {
+          "score": 0.8978,
+          "page": 1
+        },
+        "APCTT-C05": {
+          "score": 0.8582,
+          "page": 1
+        },
+        "APCTT-C06": {
+          "score": 0.8527,
+          "page": 1
+        },
+        "APCTT-C07": {
+          "score": 0.8247,
+          "page": 1
+        },
+        "APCTT-C10": {
+          "score": 0.9349,
+          "page": 1
+        },
+        "APCTT-C11": {
+          "score": 0.627,
+          "page": 1
+        },
+        "APCTT-C12": {
+          "score": 0.8248,
+          "page": 1
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-002",
+        "assessment_target": {
+          "target_id": "USGS-SDG-002",
+          "description": "Lunar South Pole Oxygen Pipeline concept"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "compared to rovers. \r\nLaunch Mass: The pipeline would only require <1,500 kg to be transported from Earth, more than 2\r\nx less mass compared to a rover transportation architecture. \r\nCosts: The pipeline is estimated to transport energy at > 90% in cost savings compared to rovers due\r\nto energy reduction and mass costs.\r\nPreliminary Hydraulic \r\nAnalysis\r\nAssumptions: Deliver at least 2 \r\nkg/hr. oxygen (10 MT/yr.) to \r\nterminal 5 km distance. One \r\nreciprocating compressor and \r\npipeline itself. 20% margin to \r\naccount for obstacles with the \r\nhydraulic model length 6 km. \r\nPipe is 6063 Aluminum that is \r\nproduced on Moon. Inlet \r\ncompression kept at 50 psi (345 \r\nkpa); pipe is buried 20 cm in lunar \r\nsoil temperature of -100 °C.\r\nRendering Lunar Oxygen Pipeline running to Launchpad\r\nRendering of Lunar Oxygen South Pole Oxygen Pipeline beginning at Regolith Processing Facility\r\nP.A. Curreri\r\n*\r\n, R. S. Polidan, A. Ignatiev, E. Carol, \r\nS. Sinha, and C. "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "and metal and oxygen tapping ports\r\nPE3D in laboratory vacuum operations\r\nLSPOP Construction Methodology\r\nLunar South Pole Oxygen Pipeline construction will \r\nbe remote, use advanced rovers, use in situ pipe \r\nsection manufacturing, and joining but follow similar \r\nconstruction methodology as on Earth including: \r\nExcavating the entire pipeline path to 20-50 cm.\r\nPipe laying in trench with continuous joining of \r\nsegments by LUNAR’s PE3D space optimized tool.\r\nInstrumentation and heat tracing added while the \r\ntrench is open.\r\nTesting for integrity of joints and hydraulic stability.\r\nIn-situ maintenance and repair by the same \r\nmethods as used in building.\r\nPipeline Trade Studies\r\nOxygen transport from extraction site to users – two basic \r\napproaches:\r\nPipelines offer significant advantages to vehicle transport.\r\nRisks: Lower complexity of pipeline offers less operational risks.\r\nEnergy: Pipeline is ~175 times less energy than rovers.\r\n"
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 3,
+      "target": "Plasmonic force propulsion",
+      "reference_trl": 3,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 6,
+      "pdf_filename": "NTRS_20190032061.pdf",
+      "reference_pages": [
+        1,
+        2
+      ],
+      "matching_named_training_pairs": 0,
+      "matching_named_validation_pairs": 2,
+      "elapsed_seconds": 65.359,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9353,
+          "page": 6
+        },
+        "APCTT-C02": {
+          "score": 0.9222,
+          "page": 6
+        },
+        "APCTT-C03": {
+          "score": 0.9157,
+          "page": 6
+        },
+        "APCTT-C04": {
+          "score": 0.8715,
+          "page": 1
+        },
+        "APCTT-C05": {
+          "score": 0.8467,
+          "page": 6
+        },
+        "APCTT-C06": {
+          "score": 0.9175,
+          "page": 1
+        },
+        "APCTT-C07": {
+          "score": 0.8131,
+          "page": 6
+        },
+        "APCTT-C10": {
+          "score": 0.8495,
+          "page": 7
+        },
+        "APCTT-C11": {
+          "score": 0.5972,
+          "page": 1
+        },
+        "APCTT-C12": {
+          "score": 0.8554,
+          "page": 53
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-003",
+        "assessment_target": {
+          "target_id": "USGS-SDG-003",
+          "description": "Plasmonic force propulsion"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "2\r\nFigure 1: Plasmon force propulsion concept\r\nA schematic of the relevant plasmonic physics and how it might be employed for propulsion \r\nis shown in Figure 1 (b). Sunlight is directly focused onto subwavelength metallic nanostructures \r\nthrough a lens (not shown). The resonant interaction and coupling of the light with the \r\nnanostructures excite surface plasmon polaritons that generate a strong gradient optical force field. \r\nNanoparticles (e.g., glass beads) are accelerated by the gradient force field and are expelled. \r\nBecause the optical force field is coupled to the nanostructure through the strong light-matter \r\ninteraction with surface plasmon polaritons, thrust is generated through momentum exchange with \r\nthe expelled particles.\r\nCareful examination of Figure 1 (b) reveals a major benefit of plasmonic propulsion: little to \r\nno electric or spacecraft power is required. "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "2\r\nFigure 1: Plasmon force propulsion concept\r\nA schematic of the relevant plasmonic physics and how it might be employed for propulsion \r\nis shown in Figure 1 (b). Sunlight is directly focused onto subwavelength metallic nanostructures \r\nthrough a lens (not shown). The resonant interaction and coupling of the light with the \r\nnanostructures excite surface plasmon polaritons that generate a strong gradient optical force field. \r\nNanoparticles (e.g., glass beads) are accelerated by the gradient force field and are expelled. \r\nBecause the optical force field is coupled to the nanostructure through the strong light-matter \r\ninteraction with surface plasmon polaritons, thrust is generated through momentum exchange with \r\nthe expelled particles.\r\nCareful examination of Figure 1 (b) reveals a major benefit of plasmonic propulsion: little to \r\nno electric or spacecraft power is required. "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "2\r\nFigure 1: Plasmon force propulsion concept\r\nA schematic of the relevant plasmonic physics and how it might be employed for propulsion \r\nis shown in Figure 1 (b). Sunlight is directly focused onto subwavelength metallic nanostructures \r\nthrough a lens (not shown). The resonant interaction and coupling of the light with the \r\nnanostructures excite surface plasmon polaritons that generate a strong gradient optical force field. \r\nNanoparticles (e.g., glass beads) are accelerated by the gradient force field and are expelled. \r\nBecause the optical force field is coupled to the nanostructure through the strong light-matter \r\ninteraction with surface plasmon polaritons, thrust is generated through momentum exchange with \r\nthe expelled particles.\r\nCareful examination of Figure 1 (b) reveals a major benefit of plasmonic propulsion: little to \r\nno electric or spacecraft power is required. "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "This project developed a higher-fidelity model of a recently envisioned small spacecraft \r\npropulsion system for precision pointing and proximity control. Plasmonic force propulsion\r\nharnesses solar light focused onto plasmon reactive subwavelength nanostructures to accelerate \r\nand expel nanoparticle propellant via strong optical forces. The goal of the project was to show \r\nthat plasmonic space propulsion can provide the level of proximity and attitude control envisioned \r\nfor future NASA nano/picosatellite missions, a level that is better than state-of-the-art approaches. \r\nWe achieved this goal by showing that plasmonic force thrusters are feasible for a range of \r\nadvanced mission concepts requiring swarm formations in a deep space environment. We \r\nperformed three case studies that evaluated the performance of the plasmonic force propulsion \r\nthruster in a deep space, microsatellite swarm formation. "
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "2\r\nFigure 1: Plasmon force propulsion concept\r\nA schematic of the relevant plasmonic physics and how it might be employed for propulsion \r\nis shown in Figure 1 (b). Sunlight is directly focused onto subwavelength metallic nanostructures \r\nthrough a lens (not shown). The resonant interaction and coupling of the light with the \r\nnanostructures excite surface plasmon polaritons that generate a strong gradient optical force field. \r\nNanoparticles (e.g., glass beads) are accelerated by the gradient force field and are expelled. \r\nBecause the optical force field is coupled to the nanostructure through the strong light-matter \r\ninteraction with surface plasmon polaritons, thrust is generated through momentum exchange with \r\nthe expelled particles.\r\nCareful examination of Figure 1 (b) reveals a major benefit of plasmonic propulsion: little to \r\nno electric or spacecraft power is required. "
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "This project developed a higher-fidelity model of a recently envisioned small spacecraft \r\npropulsion system for precision pointing and proximity control. Plasmonic force propulsion\r\nharnesses solar light focused onto plasmon reactive subwavelength nanostructures to accelerate \r\nand expel nanoparticle propellant via strong optical forces. The goal of the project was to show \r\nthat plasmonic space propulsion can provide the level of proximity and attitude control envisioned \r\nfor future NASA nano/picosatellite missions, a level that is better than state-of-the-art approaches. \r\nWe achieved this goal by showing that plasmonic force thrusters are feasible for a range of \r\nadvanced mission concepts requiring swarm formations in a deep space environment. We \r\nperformed three case studies that evaluated the performance of the plasmonic force propulsion \r\nthruster in a deep space, microsatellite swarm formation. "
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "2\r\nFigure 1: Plasmon force propulsion concept\r\nA schematic of the relevant plasmonic physics and how it might be employed for propulsion \r\nis shown in Figure 1 (b). Sunlight is directly focused onto subwavelength metallic nanostructures \r\nthrough a lens (not shown). The resonant interaction and coupling of the light with the \r\nnanostructures excite surface plasmon polaritons that generate a strong gradient optical force field. \r\nNanoparticles (e.g., glass beads) are accelerated by the gradient force field and are expelled. \r\nBecause the optical force field is coupled to the nanostructure through the strong light-matter \r\ninteraction with surface plasmon polaritons, thrust is generated through momentum exchange with \r\nthe expelled particles.\r\nCareful examination of Figure 1 (b) reveals a major benefit of plasmonic propulsion: little to \r\nno electric or spacecraft power is required. "
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 7,
+              "supporting_span": "1.3 Goal, Objectives, and Approach of the Study\r\nThe goal of our study is to show that plasmonic space propulsion can provide the level of \r\nproximity and attitude control envisioned for future NASA nano/picosatellite missions, a level that \r\nis better than state-of-the-art approaches. Our objective is to compare higher fidelity \r\nproximity/translational and attitude control predictions for plasmonic space propulsion with state\u0002of-the-art approaches. Our specific objectives are to (1) compare the experimentally measured \r\nplasmonic force on a nanoparticle with numerical predictions, (2) analyze the effect of Earth \r\nshadow and off-axis illumination on thrust capability, (3) quantify and explore the nanoparticle "
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 1,
+              "supporting_span": "This project developed a higher-fidelity model of a recently envisioned small spacecraft \r\npropulsion system for precision pointing and proximity control. Plasmonic force propulsion\r\nharnesses solar light focused onto plasmon reactive subwavelength nanostructures to accelerate \r\nand expel nanoparticle propellant via strong optical forces. The goal of the project was to show \r\nthat plasmonic space propulsion can provide the level of proximity and attitude control envisioned \r\nfor future NASA nano/picosatellite missions, a level that is better than state-of-the-art approaches. \r\nWe achieved this goal by showing that plasmonic force thrusters are feasible for a range of \r\nadvanced mission concepts requiring swarm formations in a deep space environment. We \r\nperformed three case studies that evaluated the performance of the plasmonic force propulsion \r\nthruster in a deep space, microsatellite swarm formation. "
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 53,
+              "supporting_span": "Plasmonic Force Propulsion\r\nWith the maturity of the microsatellite platform and the rapid development of micropropulsion\r\nsystems designed for that platform, it is critical that robust and precise guidance and control so\u0002lutions be developed to enable the use of these technologies in precision formation flying and\r\npointing. This study considers the feasibility of providing precision formation and pointing con\u0002trol using plasmonic force thrusters within the constraints of system-level design requirements of\r\nthe microsatellite platform. "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 8,
+      "target": "NEXT-C flight power processing unit delivered for DART",
+      "reference_trl": 8,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 1,
+      "pdf_filename": "NTRS_20205005704.pdf",
+      "reference_pages": [
+        12
+      ],
+      "matching_named_training_pairs": 0,
+      "matching_named_validation_pairs": 2,
+      "elapsed_seconds": 34.598,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.9468,
+          "page": 10
+        },
+        "APCTT-C02": {
+          "score": 0.9229,
+          "page": 4
+        },
+        "APCTT-C03": {
+          "score": 0.8926,
+          "page": 4
+        },
+        "APCTT-C04": {
+          "score": 0.9108,
+          "page": 4
+        },
+        "APCTT-C05": {
+          "score": 0.8656,
+          "page": 4
+        },
+        "APCTT-C06": {
+          "score": 0.8115,
+          "page": 12
+        },
+        "APCTT-C07": {
+          "score": 0.7802,
+          "page": 4
+        },
+        "APCTT-C10": {
+          "score": 0.8727,
+          "page": 4
+        },
+        "APCTT-C11": {
+          "score": 0.6647,
+          "page": 4
+        },
+        "APCTT-C12": {
+          "score": 0.791,
+          "page": 4
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-008",
+        "assessment_target": {
+          "target_id": "USGS-SDG-008",
+          "description": "NEXT-C flight power processing unit delivered for DART"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 7,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "met",
+          "APCTT-C06": "met",
+          "APCTT-C07": "met",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "met",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 10,
+              "supporting_span": "NEXT-C Throttle Levels\r\n– The NEXT-C Flight PPU was built \r\nfrom the Prototype PPU design\r\n– However, DART uses a more \r\nspecific range of the NEXT-C PPU \r\ncapability per Table 3 \r\n– Figure 3 shows the DART \r\noperating region on the NEXT-C \r\nthrottle table\r\n– The Flight PPU test campaign \r\nfollowed the DART operating \r\nrange to “test as you fly”, \r\nalthough the Flight PPU is \r\ncapable of full-range operation"
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C05": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 12,
+              "supporting_span": "Conclusion\r\nNEXT-C Flight PPU Powering the Flight Thruster \r\nin System Integration Testing\r\n– The ZIN, Aerojet Rocketdyne, and NASA GRC team \r\ndesigned, built, tested, and delivered a TRL 8 Flight Power \r\nProcessing Unit for APL’s DART mission \r\n– The NEXT-C PPU is designed for deep-space missions that \r\nrun on an unregulated solar bus with advantages in size, \r\nmass, power output range capability, and efficiency \r\n– The NEXT-C system provides DART and future NASA \r\nDiscovery-class and New Frontiers-class missions with a \r\nhigh-performance PPU and thruster string \r\n– Few organizations have created a Flight-qualified PPU \r\ndesign, and the NEXT-C effort provides a compelling \r\nelectric propulsion option for future NASA missions"
+            }
+          ],
+          "APCTT-C07": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C11": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 4,
+              "supporting_span": "NEXT-C PPU:\r\nBackground\r\n• In 2015, NASA selected the Aerojet Rocketdyne / ZIN Technologies Team\r\n– AR led the thruster design, build, and test\r\n– ZIN led the PPU design, build, and test \r\n– In March 2020, the first NEXT-C string was delivered to Johns Hopkins Applied Physics \r\nLaboratory (APL) for use on the Double Asteroid Redirection Test (DART)\r\n• NEXT-C Goal: Design, Build, and Test a Flight-Qualified (TRL 8) Power \r\nProcessing Unit (PPU) for the NEXT Gridded Ion Thruster\r\n– The NEXT-C PPU was based on the heritage gridded ion thruster PPU from NSTAR and NEXT, \r\nbut with significant improvements in performance and manufacturability \r\n• The paper discusses the design, build, and test of the NEXT-C PPU, and how \r\nchallenges were overcome to deliver a Flight PPU"
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    },
+    {
+      "number": 9,
+      "target": "LVSID detector and cryogenic JFET readout on Astro-E2",
+      "reference_trl": 9,
+      "reference_type": "provisional estimate",
+      "baseline_predicted_trl": 2,
+      "pdf_filename": "NTRS_20100027418.pdf",
+      "reference_pages": [
+        5,
+        13,
+        14
+      ],
+      "matching_named_training_pairs": 0,
+      "matching_named_validation_pairs": 2,
+      "elapsed_seconds": 52.578,
+      "accepted_criterion_scores": {
+        "APCTT-C01": {
+          "score": 0.8736,
+          "page": 14
+        },
+        "APCTT-C02": {
+          "score": 0.8815,
+          "page": 5
+        },
+        "APCTT-C03": {
+          "score": 0.807,
+          "page": 5
+        },
+        "APCTT-C04": {
+          "score": 0.7696,
+          "page": 5
+        },
+        "APCTT-C06": {
+          "score": 0.7663,
+          "page": 6
+        },
+        "APCTT-C10": {
+          "score": 0.6992,
+          "page": 15
+        },
+        "APCTT-C12": {
+          "score": 0.6959,
+          "page": 5
+        }
+      },
+      "assessment": {
+        "schema_version": "apctt-pdf-example-v1",
+        "checklist_version": "APCTT-2026-CHECKLIST-v1",
+        "case_id": "USGS-SDG-009",
+        "assessment_target": {
+          "target_id": "USGS-SDG-009",
+          "description": "LVSID detector and cryogenic JFET readout on Astro-E2"
+        },
+        "assessment_status": "completed",
+        "predicted_trl": 6,
+        "abstention_reason": null,
+        "error_code": null,
+        "criterion_status": {
+          "APCTT-C01": "met",
+          "APCTT-C02": "met",
+          "APCTT-C03": "met",
+          "APCTT-C04": "met",
+          "APCTT-C05": "insufficient evidence",
+          "APCTT-C06": "met",
+          "APCTT-C07": "insufficient evidence",
+          "APCTT-C08": "insufficient evidence",
+          "APCTT-C09": "insufficient evidence",
+          "APCTT-C10": "met",
+          "APCTT-C11": "insufficient evidence",
+          "APCTT-C12": "met"
+        },
+        "evidence_reference": {
+          "APCTT-C01": [
+            {
+              "document_id": "report",
+              "page": 14,
+              "supporting_span": "resistor, both the SXS and XMS LVSID detectors will be about twice as fast as the Astro-E2/XRS LVSID. The\r\nXRS pulse shown in Figure 4 has a risetime of 12 us and a falltime of 260 us. The XMS device will be about\r\n10 us rise and about 130 us fall with a threshold below 20 keV. Every pixel of the LVSID detector has its own\r\nindependent JFET amplifier and readout chain, however bias and the drain of the JFET are shared in 9\r\nchannel groups. Thus each detector layer will have its own 9-channel group of JFETs providing some\r\nsegmentation against failure. The room temperature amplifiers and JFET control will be identical to the Astro\u0002H design, which itself is almost identical to the Astro-E2 design but implemented in modern class S\r\nspaceflight components. "
+            }
+          ],
+          "APCTT-C02": [
+            {
+              "document_id": "report",
+              "page": 5,
+              "supporting_span": "Doc. no.: SRON-XMS-PL-2009-004\r\nIssue 1\r\nPLAN Date 16 June 2010\r\nIXO\r\nCat\r\nPage 5 of 5\r\nI. Introduction\r\nThis document describes a high-TRL backup implementation of the anti-coincidence detector for the\r\nIXO/XMS instrument. The backup detector, hereafter referred to as the low-voltage silicon ionization detector\r\n(LVSID), has been successfully flown on Astro-E2 (Suzaku)/XRS and is currently being implemented, without\r\nsignificant changes, on the Astro-H/SXS instrument. The LVSID anti-coincidence detector on Astro-E2/XRS\r\noperated successfully for almost 2 years, and was not affected by the loss of liquid helium in that instrument.\r\nThe LVSID continues to operate after almost 5 years on-orbit (LEO, 550 km) but with slightly increased noise\r\nfollowing the expected depletion of solid Neon after 22 months. The noise of the device is increased after the\r\nloss of sNe due to thermally induced bias and readout noise. "
+            }
+          ],
+          "APCTT-C03": [
+            {
+              "document_id": "report",
+              "page": 5,
+              "supporting_span": "Doc. no.: SRON-XMS-PL-2009-004\r\nIssue 1\r\nPLAN Date 16 June 2010\r\nIXO\r\nCat\r\nPage 5 of 5\r\nI. Introduction\r\nThis document describes a high-TRL backup implementation of the anti-coincidence detector for the\r\nIXO/XMS instrument. The backup detector, hereafter referred to as the low-voltage silicon ionization detector\r\n(LVSID), has been successfully flown on Astro-E2 (Suzaku)/XRS and is currently being implemented, without\r\nsignificant changes, on the Astro-H/SXS instrument. The LVSID anti-coincidence detector on Astro-E2/XRS\r\noperated successfully for almost 2 years, and was not affected by the loss of liquid helium in that instrument.\r\nThe LVSID continues to operate after almost 5 years on-orbit (LEO, 550 km) but with slightly increased noise\r\nfollowing the expected depletion of solid Neon after 22 months. The noise of the device is increased after the\r\nloss of sNe due to thermally induced bias and readout noise. "
+            }
+          ],
+          "APCTT-C04": [
+            {
+              "document_id": "report",
+              "page": 5,
+              "supporting_span": "Doc. no.: SRON-XMS-PL-2009-004\r\nIssue 1\r\nPLAN Date 16 June 2010\r\nIXO\r\nCat\r\nPage 5 of 5\r\nI. Introduction\r\nThis document describes a high-TRL backup implementation of the anti-coincidence detector for the\r\nIXO/XMS instrument. The backup detector, hereafter referred to as the low-voltage silicon ionization detector\r\n(LVSID), has been successfully flown on Astro-E2 (Suzaku)/XRS and is currently being implemented, without\r\nsignificant changes, on the Astro-H/SXS instrument. The LVSID anti-coincidence detector on Astro-E2/XRS\r\noperated successfully for almost 2 years, and was not affected by the loss of liquid helium in that instrument.\r\nThe LVSID continues to operate after almost 5 years on-orbit (LEO, 550 km) but with slightly increased noise\r\nfollowing the expected depletion of solid Neon after 22 months. The noise of the device is increased after the\r\nloss of sNe due to thermally induced bias and readout noise. "
+            }
+          ],
+          "APCTT-C05": [],
+          "APCTT-C06": [
+            {
+              "document_id": "report",
+              "page": 6,
+              "supporting_span": "2.1 Anti-coicidence detector for the Astro-E2 (Suzaku)/XRS instrument\r\nThe Astro-E2 (Suzaku) X-ray Spectrometer (XRS) is the logical predecessor to the IXO/XMS\r\ninstrument. The XRS consisted of 32 cryogenic x-ray detectors operated at 60 mK and cooled by an adiabatic\r\ndemagnetization refrigerator. The XRS detector system used an LVSID anti-coincidence detector placed\r\ndirectly behind the detector array to veto events in the main-array due to minimum ionizing particles. A\r\nconceptual drawing of this arrangement is shown in Figure 1. The XRS instrument operated for about 6\r\nweeks on orbit before a flaw in the accommodation of the experiment caused the pre-mature loss of LHe and\r\nthe end of the science capability of the instrument. "
+            }
+          ],
+          "APCTT-C07": [],
+          "APCTT-C08": [],
+          "APCTT-C09": [],
+          "APCTT-C10": [
+            {
+              "document_id": "report",
+              "page": 15,
+              "supporting_span": "require the addition of JFET preamplifiers and its own room temperature electronics, adding some complexity\r\nto the focal plane design and an additional electronics box at room temperature. In either case, the anti-co\r\npulse analysis would be handled in the same way as the focal plane array, and by the same electronics.\r\nThere are several ways to reduce the added complexity and increase the performance of an LVSID\r\nanti-co for the IXO focal plane with a small development effort. JFET transimpedance amplifiers were chosen\r\nto readout the LVSID detector for Astro-E2 and Astro-H not because they were well matched to the LVSID\r\nbut because they were already implemented for the microcalorimeter array and thus required only the\r\naddition of one identical readout channel. However, other techniques could be employed that require less\r\nthermal staging and that would reduce the effect of readout capacitance and thus increase the speed of the\r\ndevice. "
+            }
+          ],
+          "APCTT-C11": [],
+          "APCTT-C12": [
+            {
+              "document_id": "report",
+              "page": 5,
+              "supporting_span": "following the expected depletion of solid Neon after 22 months. The noise of the device is increased after the\r\nloss of sNe due to thermally induced bias and readout noise. No radiation damage, or off-nominal affects\r\nhave been observed with the LVSID on-orbit during the Astro-E2/XRS program. A detector die from the same\r\nfabrication run will be used on the Astro-H/SXS mission. The LVSID technology and cryogenic JFET readout\r\nsystem is thus TRL 9. The technology is described in detail in section 2.\r\nThe IXO/XMS \"backup-up\" anti-coincidence detector is a small array of LVSID detectors that are almost\r\nidentical to those employed for Astro -E2/XRS as described in this document. The readout system is identical and, in\u0002fact would use the same design as the Astro -E2/XRS JFET amplifier module (19 channels) essentially without changes\r\nexcept for its mechanical mount. "
+            }
+          ]
+        },
+        "missing_evidence": {
+          "APCTT-C05": "No accepted supporting excerpt.",
+          "APCTT-C07": "No accepted supporting excerpt.",
+          "APCTT-C08": "No accepted supporting excerpt.",
+          "APCTT-C09": "No accepted supporting excerpt.",
+          "APCTT-C11": "No accepted supporting excerpt."
+        },
+        "trl_rationale": "Highest rubric level supported by a verified excerpt."
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "team": "Oops-Spotters",
+  "package_id": "india-research",
+  "package_version": "0.2.5",
+  "submission_version": "apctt-submission-v3",
+  "base_id": "apctt-base-9e7fe1324bb6",
+  "license": "MIT",
+  "compute": {
+    "device": "cpu",
+    "precision": "float32"
+  },
+  "settings": {},
+  "models": [
+    {
+      "catalog_id": "all-minilm-l6-v2"
+    },
+    {
+      "catalog_id": "ms-marco-minilm-l6-v2"
+    },
+    {
+      "catalog_id": "modernbert-base"
+    }
+  ]
+}
